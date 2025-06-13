@@ -1,0 +1,169 @@
+{
+  "ApplicationCategory": "HealthAndFitness",
+  "Pricing": {
+    "TrialPeriod": "TrialNeverExpires",
+    "MarketSpecificPricings": {
+      "LB": "NotAvailable",
+      "EH": "NotAvailable"
+    },
+    "PriceId": "Free",
+    "IsAdvancedPricingModel": true
+  },
+  "Visibility": "Hidden",
+  "TargetPublishMode": "Immediate",
+  "TargetPublishDate": "1601-01-01T00:00:00Z",
+  "Listings": {
+    "en-us": {
+      "BaseListing": {
+        "Keywords": [],
+        "Description": "desc blah blah 123.",
+        "Features": [],
+        "ReleaseNotes": "",
+        "Images": [
+          {
+            "FileStatus": "PendingUpload",
+            "FileName": "Icon_test.png",
+            "ImageType": "Icon"
+          },
+          {
+            "FileStatus": "PendingUpload",
+            "FileName": "Screenshot_myss1.png",
+            "ImageType": "Screenshot"
+          },
+          {
+            "FileStatus": "PendingUpload",
+            "FileName": "Screenshot_myss2.png",
+            "ImageType": "Screenshot"
+          }
+        ],
+        "RecommendedHardware": [],
+        "MinimumHardware": [],
+        "Title": "dupmy123"
+      },
+      "PlatformOverrides": {}
+    },
+    "en": {
+      "BaseListing": {
+        "Keywords": [],
+        "Description": "english desc yayy.",
+        "Features": [],
+        "ReleaseNotes": "this is a test release note",
+        "Images": [
+          {
+            "FileStatus": "PendingUpload",
+            "FileName": "Icon_test.png",
+            "ImageType": "Icon"
+          },
+          {
+            "FileStatus": "PendingUpload",
+            "FileName": "Screenshot_myss1.png",
+            "ImageType": "Screenshot"
+          },
+          {
+            "FileStatus": "PendingUpload",
+            "FileName": "Screenshot_myss2.png",
+            "ImageType": "Screenshot"
+          }
+        ],
+        "RecommendedHardware": [],
+        "MinimumHardware": [],
+        "Title": "dupmy123"
+      },
+      "PlatformOverrides": {}
+    },
+    "af": {
+      "BaseListing": {
+        "Keywords": [],
+        "Description": "afrikaans? desc yayy.",
+        "Features": [],
+        "ReleaseNotes": "this is a test release note",
+        "Images": [
+          {
+            "FileStatus": "PendingUpload",
+            "FileName": "Icon_test.png",
+            "ImageType": "Icon"
+          },
+          {
+            "FileStatus": "PendingUpload",
+            "FileName": "Screenshot_myss1.png",
+            "ImageType": "Screenshot"
+          },
+          {
+            "FileStatus": "PendingUpload",
+            "FileName": "Screenshot_myss2.png",
+            "ImageType": "Screenshot"
+          }
+        ],
+        "RecommendedHardware": [],
+        "MinimumHardware": [],
+        "Title": "dupmy123"
+      },
+      "PlatformOverrides": {}
+    }
+  },
+  "HardwarePreferences": [],
+  "AutomaticBackupEnabled": false,
+  "CanInstallOnRemovableMedia": false,
+  "IsGameDvrEnabled": false,
+  "GamingOptions": [
+    {
+      "Genres": [],
+      "IsLocalMultiplayer": false,
+      "IsLocalCooperative": false,
+      "IsOnlineMultiplayer": false,
+      "IsOnlineCooperative": false,
+      "IsBroadcastingPrivilegeGranted": true,
+      "IsCrossPlayEnabled": false,
+      "KinectDataForExternal": "Disabled"
+    }
+  ],
+  "HasExternalInAppProducts": false,
+  "MeetAccessibilityGuidelines": false,
+  "ApplicationPackages": [
+    {
+      "FileName": "dupmy123.msixbundle",
+      "FileStatus": "PendingUpload"
+    }
+  ],
+  "AllowMicrosoftDecideAppAvailabilityToFutureDeviceFamilies": false,
+  "AllowTargetFutureDeviceFamilies": {
+    "Desktop": true,
+    "Mobile": false,
+    "Xbox": false,
+    "Holographic": true
+  },
+  "Trailers": [
+    {
+      "VideoFileName": "Trailer_demo.mp4",
+      "TrailerAssets": {
+        "en-us": {
+          "Title": "demo",
+          "ImageList": [
+            {
+              "FileName": "TrailerImage_demo.png",
+              "Description": null
+            }
+          ]
+        },
+        "en": {
+          "Title": "demo",
+          "ImageList": [
+            {
+              "FileName": "TrailerImage_demo.png",
+              "Description": null
+            }
+          ]
+        },
+        "af": {
+          "Title": "demo",
+          "ImageList": [
+            {
+              "FileName": "TrailerImage_demo.png",
+              "Description": null
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

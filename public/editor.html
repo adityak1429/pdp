@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PDP Editor</title>
+  <style>
+    /* ...styles unchanged, omitted for brevity... */
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f3f3f3; margin: 0; padding: 0; color: #222; }
+    .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 32px 40px 40px 40px; }
+    .hero { display: flex; gap: 32px; align-items: flex-start; margin-bottom: 32px; }
+    .hero-media img, .hero-media video { border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.10); max-width: 120px; max-height: 120px; background: #eee; display: block; }
+    .hero-details { flex: 1; }
+    .app-title-input, .app-desc-input { width: 100%; border: none; border-bottom: 2px solid #0078d7; font-size: 2.2rem; font-weight: 600; margin: 0 0 8px 0; color: #0078d7; outline: none; background: transparent; resize: none; }
+    .app-desc-input { font-size: 1.1rem; font-weight: 400; color: #444; margin-bottom: 16px; border-bottom: 1px solid #aaa; min-height: 40px; }
+    .pricing-input { font-size: 1.1rem; color: #0078d7; font-weight: 600; border: none; background: transparent; outline: none; border-bottom: 1px solid #0078d7; margin-bottom: 16px; }
+    .approve-btn { background: #0078d7; color: #fff; border: none; border-radius: 4px; padding: 12px 32px; font-size: 1.1rem; font-weight: 500; cursor: pointer; margin-top: 24px; float: right; transition: background 0.2s; }
+    .approve-btn:hover { background: #005fa1; }
+    .section { margin-bottom: 32px; }
+    .section-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; color: #222; border-left: 4px solid #0078d7; padding-left: 10px; }
+    .editable-list { list-style: disc inside; margin: 0 0 0 16px; padding: 0; color: #333; }
+    .editable-list li { margin-bottom: 6px; display: flex; align-items: center; }
+    .editable-list input { flex: 1; border: none; border-bottom: 1px solid #aaa; background: transparent; font-size: 1rem; margin-right: 8px; outline: none; }
+    .add-btn, .remove-btn { background: #eee; border: none; color: #0078d7; font-size: 1.1rem; cursor: pointer; border-radius: 3px; margin-left: 4px; padding: 2px 8px; transition: background 0.2s; }
+    .add-btn:hover, .remove-btn:hover { background: #0078d7; color: #fff; }
+    .meta-table { border-collapse: collapse; width: 100%; margin-top: 8px; }
+    .meta-table th, .meta-table td { text-align: left; padding: 6px 10px; border-bottom: 1px solid #eee; font-size: 1rem; }
+    .meta-table th { color: #666; font-weight: 500; width: 180px; }
+    .meta-table input, .meta-table select { width: 100%; border: none; border-bottom: 1px solid #aaa; background: transparent; font-size: 1rem; outline: none; }
+    .clear { clear: both; }
+    textarea { font-family: inherit; }
+    .media-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+    .media-thumb { position: relative; width: 120px; height: 70px; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.10); background: #eee; display: flex; align-items: center; justify-content: center; }
+    .media-thumb img, .media-thumb video { width: 100%; height: 100%; object-fit: cover; }
+    .media-label { position: absolute; bottom: 2px; left: 2px; background: rgba(0,0,0,0.6); color: #fff; font-size: 0.75rem; padding: 1px 4px; border-radius: 3px; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <div class="hero-media" id="icon"></div>
+      <div class="hero-details">
+        <input id="title" class="app-title-input" placeholder="App Title" />
+        <textarea id="description" class="app-desc-input" placeholder="Description"></textarea>
+        <input id="pricing" class="pricing-input" placeholder="Pricing" />
+        <button class="approve-btn" onclick="approve()">Approve & Save</button>
+      </div>
+    </div>
+    <div class="clear"></div>
+
+    <div class="section">
+      <div class="section-title">Screenshots</div>
+      <div id="screenshots" class="media-grid"></div>
+      <input type="file" id="screenshotUpload" multiple accept="image/*" style="margin-bottom:16px;">
+      <button class="add-btn" onclick="uploadScreenshots()">Upload Screenshots</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Promotional Art & Media</div>
+      <div id="promoMedia" class="media-grid"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Features</div>
+      <ul class="editable-list" id="features"></ul>
+      <button class="add-btn" onclick="addListItem('features')">+ Add Feature</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Release Notes</div>
+      <textarea id="releaseNotes" style="width:100%;min-height:60px;color:#444;border:1px solid #eee;border-radius:4px;padding:8px;"></textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Hardware Requirements</div>
+      <ul class="editable-list" id="hardware"></ul>
+      <button class="add-btn" onclick="addListItem('hardware')">+ Add Hardware</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Genres</div>
+      <ul class="editable-list" id="genres"></ul>
+      <button class="add-btn" onclick="addListItem('genres')">+ Add Genre</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">App Details</div>
+      <table class="meta-table">
+        <tr>
+          <th>Category</th>
+          <td><input id="category" /></td>
+        </tr>
+        <tr>
+          <th>Visibility</th>
+          <td>
+            <select id="visibility">
+              <option value="Public">Public</option>
+              <option value="Private">Private</option>
+              <option value="Hidden">Hidden</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>Publish Mode</th>
+          <td>
+            <select id="publishMode">
+              <option value="Immediate">Immediate</option>
+              <option value="Manual">Manual</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>Publish Date</th>
+          <td><input id="publishDate" type="date" /></td>
+        </tr>
+        <tr>
+          <th>Trial Period</th>
+          <td><input id="trial" /></td>
+        </tr>
+        <tr>
+          <th>Backup Enabled</th>
+          <td>
+            <select id="backup">
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>External In-App Products</th>
+          <td>
+            <select id="inapp">
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>Accessibility Guidelines Met</th>
+          <td>
+            <select id="accessibility">
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+<script>
+const sessionId = new URLSearchParams(window.location.search).get('session');
+if (!sessionId) {
+  alert("Session ID is required in the URL (e.g. ?session=12345)");
+  throw new Error("Session ID not provided");
+}
+
+// State
+let metadata = {};
+let baseListing = {};
+let genresArr = [];
+let featuresArr = [];
+let hardwareArr = [];
+let serverScreenshotsArr = [];
+let previewScreenshotsArr = [];
+let promoArr = [];
+let iconFile = null;
+let iconDataUrl = null;
+let trailersArr = [];
+let mediaBase = '';
+let allMediaFiles = [];
+
+// Media type helpers
+const screenshotPrefixes = [
+  "Screenshot", "MobileScreenshot", "XboxScreenshot", "SurfaceHubScreenshot", "HoloLensScreenshot"
+];
+const iconPrefixes = [
+  "Icon", "SquareIcon358X358"
+];
+const promoPrefixes = [
+  "PromotionalArt16x9", "PromotionalArtwork2400X1200", "StoreLogo9x16", "StoreLogoSquare",
+  "PromotionalArtwork414X180", "XboxBrandedKeyArt", "XboxTitledHeroArt", "XboxFeaturedPromotionalArt",
+  "BackgroundImage1000X800"
+];
+const trailerPrefix = "Trailer";
+
+function getMediaType(filename) {
+  for (const prefix of screenshotPrefixes) if (filename.startsWith(prefix)) return "screenshot";
+  for (const prefix of iconPrefixes) if (filename.startsWith(prefix)) return "icon";
+  for (const prefix of promoPrefixes) if (filename.startsWith(prefix)) return "promo";
+  if (filename.startsWith(trailerPrefix)) return "trailer";
+  return "other";
+}
+
+// DataURL to Blob
+function dataURLtoBlob(dataurl) {
+  const arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+  for (let i = 0; i < n; i++) u8arr[i] = bstr.charCodeAt(i);
+  return new Blob([u8arr], { type: mime });
+}
+
+// Load server screenshots as { filename, buffer, dataUrl }
+async function loadServerScreenshots(sessionId, mediaFiles, mediaBase) {
+  const screenshotFiles = mediaFiles.filter(f => getMediaType(f) === "screenshot");
+  const arr = [];
+  for (const filename of screenshotFiles) {
+    const res = await fetch(`${mediaBase.replace(/\/$/, '')}/${filename}`);
+    const data = await res.json();
+    if (data.files && data.files.length) {
+      arr.push({
+        filename: data.files[0].filename,
+        buffer: data.files[0].buffer,
+        dataUrl: `data:image/png;base64,${data.files[0].buffer}`
+      });
+    }
+  }
+  return arr;
+}
+
+// Load icon as data URL
+async function loadIconDataUrl(mediaBase, iconFile) {
+  if (!iconFile) return null;
+  const iconRes = await fetch(`${mediaBase.replace(/\/$/, '')}/${iconFile}`);
+  const iconData = await iconRes.json();
+  if (iconData.files && iconData.files.length) {
+    return `data:image/png;base64,${iconData.files[0].buffer}`;
+  }
+  return null;
+}
+
+// Render media grid
+function renderMediaGrid(containerId, arr, base, label) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  arr.forEach((file) => {
+    const isDataUrl = typeof file === 'string' && file.startsWith('data:');
+    const isFullUrl = typeof file === 'string' && file.startsWith('http');
+    const ext = isDataUrl ? '' : (typeof file === 'string' ? file.split('.').pop().toLowerCase() : '');
+    const wrap = document.createElement('div');
+    wrap.className = 'media-thumb';
+    let mediaElem;
+    if (!isDataUrl && !isFullUrl && ['mp4', 'webm'].includes(ext)) {
+      mediaElem = document.createElement('video');
+      mediaElem.src = base + file;
+      mediaElem.controls = true;
+    } else {
+      mediaElem = document.createElement('img');
+      mediaElem.src = isDataUrl || isFullUrl ? file : (base + file);
+    }
+    wrap.appendChild(mediaElem);
+    const lbl = document.createElement('span');
+    lbl.className = 'media-label';
+    lbl.innerText = label;
+    wrap.appendChild(lbl);
+    container.appendChild(wrap);
+  });
+}
+
+// Render icon
+function renderIcon(iconDataUrl) {
+  const iconDiv = document.getElementById('icon');
+  iconDiv.innerHTML = '';
+  if (iconDataUrl) {
+    const img = document.createElement('img');
+    img.src = iconDataUrl;
+    img.alt = 'App Icon';
+    iconDiv.appendChild(img);
+  } else {
+    iconDiv.innerHTML = '<div style="width:120px;height:120px;background:#e0e0e0;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:1.2rem;">No Icon</div>';
+  }
+}
+
+// Upload screenshots (preview only, not upload to server)
+function uploadScreenshots() {
+  const input = document.getElementById('screenshotUpload');
+  if (!input.files.length) return;
+  previewScreenshotsArr = [];
+  let filesRead = 0;
+  for (const file of input.files) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      previewScreenshotsArr.push(e.target.result);
+      filesRead++;
+      if (filesRead === input.files.length) {
+        renderMediaGrid('screenshots', [
+          ...serverScreenshotsArr.map(f => f.dataUrl),
+          ...previewScreenshotsArr
+        ], '', "Screenshot");
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// List rendering helpers
+function renderList(type, arr) {
+  const ul = document.getElementById(type);
+  ul.innerHTML = '';
+  arr.forEach((item, idx) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<input value="${item}" onchange="updateListItem('${type}', ${idx}, this.value)" />
+      <button class="remove-btn" onclick="removeListItem('${type}', ${idx})">&times;</button>`;
+    ul.appendChild(li);
+  });
+}
+function addListItem(type) {
+  if (type === 'features') featuresArr.push('');
+  if (type === 'hardware') hardwareArr.push('');
+  if (type === 'genres') genresArr.push('');
+  renderList(type, type === 'features' ? featuresArr : type === 'hardware' ? hardwareArr : genresArr);
+}
+function removeListItem(type, idx) {
+  if (type === 'features') featuresArr.splice(idx, 1);
+  if (type === 'hardware') hardwareArr.splice(idx, 1);
+  if (type === 'genres') genresArr.splice(idx, 1);
+  renderList(type, type === 'features' ? featuresArr : type === 'hardware' ? hardwareArr : genresArr);
+}
+function updateListItem(type, idx, value) {
+  if (type === 'features') featuresArr[idx] = value;
+  if (type === 'hardware') hardwareArr[idx] = value;
+  if (type === 'genres') genresArr[idx] = value;
+}
+window.addListItem = addListItem;
+window.removeListItem = removeListItem;
+window.updateListItem = updateListItem;
+
+// Initial load
+async function initialLoad() {
+  const data = await fetch(`/session/${sessionId}`).then(res => res.json());
+  metadata = data.metadata;
+  const listing = (metadata.Listings && (metadata.Listings['en-us'] || metadata.Listings['en'] || Object.values(metadata.Listings)[0])) || {};
+  baseListing = listing.BaseListing || {};
+
+  // Title, Description, Pricing
+  document.getElementById('title').value = baseListing.Title || '';
+  document.getElementById('description').value = baseListing.Description || '';
+  document.getElementById('pricing').value = (metadata.Pricing && metadata.Pricing.PriceId) || 'Free';
+
+  // Media parsing
+  mediaBase = data.mediaBase || `/media/${sessionId}/`;
+  allMediaFiles = Array.isArray(data.mediaFiles) ? data.mediaFiles : [];
+
+  // Screenshots
+  serverScreenshotsArr = await loadServerScreenshots(sessionId, allMediaFiles, mediaBase);
+  renderMediaGrid('screenshots', [
+    ...serverScreenshotsArr.map(f => f.dataUrl),
+    ...previewScreenshotsArr
+  ], '', "Screenshot");
+
+  // Promo Art & Media
+  promoArr = [];
+  iconFile = null;
+  trailersArr = [];
+  for (const file of allMediaFiles) {
+    const type = getMediaType(file);
+    if (type === "promo") promoArr.push(file);
+    else if (type === "icon" && !iconFile) iconFile = file;
+    else if (type === "trailer") trailersArr.push(file);
+  }
+  renderMediaGrid('promoMedia', promoArr, mediaBase, "Promo");
+
+  // Icon
+  iconDataUrl = await loadIconDataUrl(mediaBase, iconFile);
+  renderIcon(iconDataUrl);
+
+  // Features
+  featuresArr = baseListing.Features ? [...baseListing.Features] : [];
+  renderList('features', featuresArr);
+
+  // Release Notes
+  document.getElementById('releaseNotes').value = baseListing.ReleaseNotes || '';
+
+  // Hardware Requirements
+  hardwareArr = baseListing.MinimumHardware ? [...baseListing.MinimumHardware] : [];
+  renderList('hardware', hardwareArr);
+
+  // Genres
+  genresArr = (metadata.GamingOptions && metadata.GamingOptions[0] && metadata.GamingOptions[0].Genres) ? [...metadata.GamingOptions[0].Genres] : [];
+  renderList('genres', genresArr);
+
+  // App Details
+  document.getElementById('category').value = metadata.ApplicationCategory || '';
+  document.getElementById('visibility').value = metadata.Visibility || 'Public';
+  document.getElementById('publishMode').value = metadata.TargetPublishMode || 'Immediate';
+  document.getElementById('publishDate').value = metadata.TargetPublishDate ? metadata.TargetPublishDate.split('T')[0] : '';
+  document.getElementById('trial').value = (metadata.Pricing && metadata.Pricing.TrialPeriod) || '';
+  document.getElementById('backup').value = metadata.AutomaticBackupEnabled ? 'true' : 'false';
+  document.getElementById('inapp').value = metadata.HasExternalInAppProducts ? 'true' : 'false';
+  document.getElementById('accessibility').value = metadata.MeetAccessibilityGuidelines ? 'true' : 'false';
+}
+initialLoad();
+
+// Approve & Save
+async function approve() {
+  // Update baseListing and metadata with edited values
+  baseListing.Title = document.getElementById('title').value;
+  baseListing.Description = document.getElementById('description').value;
+  baseListing.Features = featuresArr.filter(f => f.trim());
+  baseListing.ReleaseNotes = document.getElementById('releaseNotes').value;
+  baseListing.MinimumHardware = hardwareArr.filter(h => h.trim());
+
+  // Pricing
+  if (!metadata.Pricing) metadata.Pricing = {};
+  metadata.Pricing.PriceId = document.getElementById('pricing').value;
+  metadata.Pricing.TrialPeriod = document.getElementById('trial').value;
+
+  // Genres
+  if (!metadata.GamingOptions) metadata.GamingOptions = [{}];
+  metadata.GamingOptions[0].Genres = genresArr.filter(g => g.trim());
+
+  // App Details
+  metadata.ApplicationCategory = document.getElementById('category').value;
+  metadata.Visibility = document.getElementById('visibility').value;
+  metadata.TargetPublishMode = document.getElementById('publishMode').value;
+  metadata.TargetPublishDate = document.getElementById('publishDate').value ? document.getElementById('publishDate').value + 'T00:00:00Z' : '';
+  metadata.AutomaticBackupEnabled = document.getElementById('backup').value === 'true';
+  metadata.HasExternalInAppProducts = document.getElementById('inapp').value === 'true';
+  metadata.MeetAccessibilityGuidelines = document.getElementById('accessibility').value === 'true';
+
+  // Write back to Listings
+  let listingKey = Object.keys(metadata.Listings).find(
+    k => metadata.Listings[k].BaseListing === baseListing
+  );
+  if (!listingKey) {
+    listingKey = metadata.Listings['en-us'] ? 'en-us' : Object.keys(metadata.Listings)[0];
+  }
+  metadata.Listings[listingKey].BaseListing = baseListing;
+
+  // Prepare FormData for multipart/form-data POST
+  const formData = new FormData();
+  formData.append('metadata', JSON.stringify(metadata, null, 2));
+
+  // Add preview screenshots (data URLs) as files
+  const newScreenshotNames = [];
+  previewScreenshotsArr.forEach((dataUrl, idx) => {
+    const filename = `Screenshot_${Date.now()}_${idx}.png`;
+    formData.append('files', dataURLtoBlob(dataUrl), filename);
+    newScreenshotNames.push(filename);
+  });
+
+  // Compose the full list of screenshots for metadata (existing + new)
+  const allScreenshotNames = [
+    ...serverScreenshotsArr.map(f => f.filename),
+    ...newScreenshotNames
+  ];
+  baseListing.Images = allScreenshotNames;
+
+  // Icon upload (if you have an icon file input, e.g. <input type="file" id="iconUpload">)
+  const iconInput = document.getElementById('iconUpload');
+  if (iconInput && iconInput.files.length) {
+    formData.append('files', iconInput.files[0], iconInput.files[0].name);
+  }
+
+  await fetch(`/${sessionId}/complete`, {
+    method: 'POST',
+    body: formData
+  }).then(res => res.json());
+
+  // After upload, clear previews and refresh from server
+  previewScreenshotsArr = [];
+  await initialLoad();
+  alert("Saved and Approved!");
+}
+</script>
+</body>
+</html>
