@@ -34,26 +34,25 @@ const saveFiles = (req, sessionId) => {
   if (metadataField) {
     try {
       metadata = JSON.parse(metadataField);
-      console.log(`Metadata received: ${JSON.stringify(metadata)}`);
+      console.log(`Metadata received: ${JSON.stringify(metadata,null,2)}`);
     } catch (e) {
       throw new Error("Invalid metadata JSON.");
     }
   }
 
   // Save metadata.json
-  fs.writeFileSync(path.join(sessionDir, 'metadata.json'), JSON.stringify(metadata, null, 2));
+  fs.writeFileSync(path.join(sessionDir, 'metadata.json'), JSON.stringify(metadata));
   console.log(`Metadata saved for session ${sessionDir}`);
   // Save files
   const mediaFiles = [];
   console.log(`Saving files for session ${req.files}`);
   for (const file of req.files) {
-    file.filename =  file.filename || file.originalname;
-    const filePath = path.join(sessionDir, file.filename);
+    const filePath = path.join(sessionDir, file.originalname);
     console.log(`Saving file: ${filePath}`);
     fs.writeFileSync(filePath, file.buffer);
-    if (file.filename !== 'metadata.json') {
+    if (file.originalname !== 'metadata.json') {
       console.log(`File saved: ${filePath}`);
-      mediaFiles.push(file.filename);
+      mediaFiles.push(file.originalname);
     }
   }
 };
@@ -95,11 +94,11 @@ app.get('/poll/:sessionId', (req, res) => {
     return res.status(404).json({ error: "Session not found." });
   }
   const files = fs.readdirSync(sessionDir);
-  const result = files.map(filename => {
-    const filePath = path.join(sessionDir, filename);
+  const result = files.map(originalname => {
+    const filePath = path.join(sessionDir, originalname);
     const data = fs.readFileSync(filePath);
     return {
-      filename: filename === 'metadata.json' ? 'metadata' : filename,
+      filename: originalname,
       data: data.toString('base64')
     };
   });
@@ -116,10 +115,10 @@ app.post('/:sessionId/complete', upload.any(), (req, res) => {
     return res.status(404).json({ error: "Session not found." });
   }
 
-  // Delete all existing files in the session directory
-  for (const file of fs.readdirSync(sessionDir)) {
-    fs.unlinkSync(path.join(sessionDir, file));
-  }
+  // // Delete all existing files in the session directory
+  // for (const file of fs.readdirSync(sessionDir)) {
+  //   fs.unlinkSync(path.join(sessionDir, file));
+  // }
 
   // Save new files
   try {
@@ -134,10 +133,10 @@ app.post('/:sessionId/complete', upload.any(), (req, res) => {
   res.json({ status: "Session updated", sessionId });
 });
 
-// Serve session media files at /media/:sessionId/:filename
-app.get('/media/:sessionId/:filename', (req, res) => {
-  const { sessionId, filename } = req.params;
-  const filePath = path.join(__dirname, 'sessions', sessionId, filename);
+// Serve session media files at /media/:sessionId/:originalname
+app.get('/media/:sessionId/:originalname', (req, res) => {
+  const { sessionId, originalname } = req.params;
+  const filePath = path.join(__dirname, 'sessions', sessionId, originalname);
   if (!fs.existsSync(filePath)) {
     return res.status(404).send('File not found');
   }
@@ -147,7 +146,7 @@ app.get('/media/:sessionId/:filename', (req, res) => {
   res.json({
     files: [
       {
-        filename: filename,
+        filename: originalname,
         buffer: fileBuffer.toString('base64')
       }
     ]
@@ -160,7 +159,10 @@ app.get('/session/:sessionId', (req, res) => {
   const sessionDir = path.join(__dirname, 'sessions', sessionId);
   const metadataPath = path.join(sessionDir, 'metadata.json');
   if (!fs.existsSync(metadataPath)) {
-    return res.status(404).json({ error: "Session not found." });
+    console.error(`Metadata not found at ${metadataPath}`);
+    const files = fs.existsSync(sessionDir) ? fs.readdirSync(sessionDir) : [];
+    console.log(`Files at ${sessionDir}:`, files);
+    return res.status(404).json({ error: `metadata not found at ${metadataPath}.` });
   }
   const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf-8'));
   // List all media files except metadata.json
@@ -170,6 +172,30 @@ app.get('/session/:sessionId', (req, res) => {
     mediaFiles,
     mediaBase: `/media/${sessionId}/`
   });
+});
+
+// Clear all files and metadata for a session
+app.post('/session/:sessionId/clear', (req, res) => {
+  const sessionId = req.params.sessionId;
+  const sessionDir = path.join(__dirname, 'sessions', sessionId);
+
+  if (!fs.existsSync(sessionDir)) {
+    return res.status(404).json({ error: "Session not found." });
+  }
+
+  // Delete all files in the session directory
+  for (const file of fs.readdirSync(sessionDir)) {
+    fs.unlinkSync(path.join(sessionDir, file));
+  }
+  // Optionally, remove the session directory itself
+  fs.rmdirSync(sessionDir);
+
+  // Remove session flag if present
+  if (global.sessionFlags && global.sessionFlags[sessionId]) {
+    delete global.sessionFlags[sessionId];
+  }
+
+  res.json({ status: "Session cleared", sessionId });
 });
 
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
