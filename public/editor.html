@@ -35,123 +35,142 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="hero">
-      <div class="hero-media" id="icon"></div>
-      <div class="hero-details">
-        <div style="margin-bottom: 16px;">
-          <label for="listingSelect" style="font-weight:600;">Language Listing:</label>
-          <select id="listingSelect" onchange="switchListing(this.value)"></select>
-          <button class="add-btn" onclick="addListing()">+ Add Listing</button>
-          <button class="remove-btn" onclick="removeListing()" style="margin-left:8px;">Remove Listing</button>
-        </div>
-        <input id="title" class="app-title-input" placeholder="App title" />
-        <textarea id="description" class="app-desc-input" placeholder="description"></textarea>
-        <input id="pricing" class="pricing-input" placeholder="Pricing" />
-        <button class="approve-btn" onclick="approve()">Approve & Save</button>
+
+<div class="container">
+  <div class="hero">
+    <div class="hero-media" id="icon">
+      <!-- Icon image will be rendered here by JS -->
+      <input type="file" id="iconUpload" accept="image/*" style="margin-top:8px;display:block;" onchange="changeIcon(this)">
+      <button class="add-btn" type="button" onclick="document.getElementById('iconUpload').click()">Change Icon</button>
+    </div>
+    <div class="hero-details">
+      <div style="margin-bottom: 16px;">
+        <label for="listingSelect" style="font-weight:600;">Language Listing:</label>
+        <select id="listingSelect" onchange="switchListing(this.value)"></select>
+        <button class="add-btn" onclick="addListing()">+ Add Listing</button>
+        <button class="remove-btn" onclick="removeListing()" style="margin-left:8px;">Remove Listing</button>
       </div>
-    </div>
-    <div class="clear"></div>
-
-    <div class="section">
-      <div class="section-title">Screenshots</div>
-      <div id="screenshots" class="media-grid"></div>
-      <input type="file" id="screenshotUpload" multiple accept="image/*" style="margin-bottom:16px;">
-      <button class="add-btn" onclick="uploadScreenshots()">Upload Screenshots</button>
-    </div>
-
-    <div class="section">
-      <div class="section-title">Promotional Art & Media</div>
-      <div id="promoMedia" class="media-grid"></div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">features</div>
-      <ul class="editable-list" id="features"></ul>
-      <button class="add-btn" onclick="addListItem('features')">+ Add Feature</button>
-    </div>
-
-    <div class="section">
-      <div class="section-title">Release Notes</div>
-      <textarea id="releaseNotes" style="width:100%;min-height:60px;"></textarea>
-    </div>
-
-    <div class="section">
-      <div class="section-title">Hardware Requirements</div>
-      <ul class="editable-list" id="hardware"></ul>
-      <button class="add-btn" onclick="addListItem('hardware')">+ Add Hardware</button>
-    </div>
-
-    <div class="section">
-      <div class="section-title">Genres</div>
-      <ul class="editable-list" id="genres"></ul>
-      <button class="add-btn" onclick="addListItem('genres')">+ Add Genre</button>
-    </div>
-
-    <div class="section">
-      <div class="section-title">App Details</div>
-      <table class="meta-table">
-        <tr>
-          <th>Category</th>
-          <td><input id="category" /></td>
-        </tr>
-        <tr>
-          <th>Visibility</th>
-          <td>
-            <select id="visibility">
-              <option value="Public">Public</option>
-              <option value="Private">Private</option>
-              <option value="Hidden">Hidden</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <th>Publish Mode</th>
-          <td>
-            <select id="publishMode">
-              <option value="Immediate">Immediate</option>
-              <option value="Manual">Manual</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <th>Publish Date</th>
-          <td><input id="publishDate" type="date" /></td>
-        </tr>
-        <tr>
-          <th>Trial Period</th>
-          <td><input id="trial" /></td>
-        </tr>
-        <tr>
-          <th>Backup Enabled</th>
-          <td>
-            <select id="backup">
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <th>External In-App Products</th>
-          <td>
-            <select id="inapp">
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <th>Accessibility Guidelines Met</th>
-          <td>
-            <select id="accessibility">
-              <option value="true">Yes</option>
-              <option value="false">No</option>
-            </select>
-          </td>
-        </tr>
-      </table>
+      <input id="title" class="app-title-input" placeholder="App title" />
+      <textarea id="description" class="app-desc-input" placeholder="description"></textarea>
+      <input id="pricing" class="pricing-input" placeholder="Pricing" />
+      <button class="approve-btn" onclick="approve()">Approve & Save</button>
     </div>
   </div>
+  <div class="clear"></div>
+
+  <div class="section">
+    <div class="section-title">Screenshots</div>
+    <div id="screenshots" class="media-grid"></div>
+    <input type="file" id="screenshotUpload" multiple accept="image/*" style="margin-bottom:16px;">
+    <button class="add-btn" onclick="uploadScreenshots()">Upload Screenshots</button>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Promotional Art & Media</div>
+    <div id="promoMedia" class="media-grid"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">features</div>
+    <ul class="editable-list" id="features"></ul>
+    <button class="add-btn" onclick="addListItem('features')">+ Add Feature</button>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Release Notes</div>
+    <textarea id="releaseNotes" style="width:100%;min-height:60px;"></textarea>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Hardware Requirements</div>
+    <ul class="editable-list" id="hardware"></ul>
+    <button class="add-btn" onclick="addListItem('hardware')">+ Add Hardware</button>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Genres</div>
+    <ul class="editable-list" id="genres"></ul>
+    <button class="add-btn" onclick="addListItem('genres')">+ Add Genre</button>
+  </div>
+
+  <div class="section">
+    <div class="section-title">App Details</div>
+    <table class="meta-table">
+      <tr>
+        <th>Category</th>
+        <td><input id="category" /></td>
+      </tr>
+      <tr>
+        <th>Visibility</th>
+        <td>
+          <select id="visibility">
+            <option value="Public">Public</option>
+            <option value="Private">Private</option>
+            <option value="Hidden">Hidden</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th>Publish Mode</th>
+        <td>
+          <select id="publishMode">
+            <option value="Immediate">Immediate</option>
+            <option value="Manual">Manual</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th>Publish Date</th>
+        <td><input id="publishDate" type="date" /></td>
+      </tr>
+      <tr>
+        <th>Trial Period</th>
+        <td><input id="trial" /></td>
+      </tr>
+      <tr>
+        <th>Backup Enabled</th>
+        <td>
+          <select id="backup">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th>External In-App Products</th>
+        <td>
+          <select id="inapp">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th>Accessibility Guidelines Met</th>
+        <td>
+          <select id="accessibility">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Trailer Video</div>
+    <div id="trailerMedia" class="media-grid"></div>
+    <input type="file" id="trailerUpload" accept="video/mp4,video/webm" style="margin-bottom:16px;">
+    <button class="add-btn" onclick="uploadTrailer()">Upload Trailer</button>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Trailer Image</div>
+    <div id="trailerImageMedia" class="media-grid"></div>
+    <input type="file" id="trailerImageUpload" accept="image/*" style="margin-bottom:16px;">
+    <button class="add-btn" onclick="uploadTrailerImage()">Upload Trailer Image</button>
+  </div>
+</div>
 
 
 
@@ -161,6 +180,7 @@
 const sessionId = new URLSearchParams(window.location.search).get('session');
 if (!sessionId) {
   alert("Session ID is required in the URL (e.g. ?session=12345)");
+  document.querySelector('.container').innerHTML = '';
   throw new Error("Session ID not provided");
 }
 
@@ -177,8 +197,21 @@ let iconDataUrl = null;
 let mediaBase = '';
 let allMediaFiles = [];
 let currentListingKey = null;
+let screenshotsArr = []; // [{file, dataUrl}]
+let trailerArr = [];
+let trailerImageArr = [];
 
-// Media type helpers
+// --- MediaType Enum ---
+const MediaType = {
+  SCREENSHOT: "Screenshot",
+  ICON: "Icon",
+  PROMO: "Promo",
+  TRAILER: "Trailer",
+  TRAILER_IMAGE: "TrailerImage",
+  OTHER: "other"
+};
+
+// --- Media type helpers ---
 const screenshotPrefixes = [
   "Screenshot", "MobileScreenshot", "XboxScreenshot", "SurfaceHubScreenshot", "HoloLensScreenshot"
 ];
@@ -192,12 +225,13 @@ const promoPrefixes = [
 ];
 const trailerPrefix = "Trailer";
 
+// --- Use enum for getMediaType ---
 function getMediaType(originalname) {
-  for (const prefix of screenshotPrefixes) if (originalname.startsWith(prefix)) return "screenshot";
-  for (const prefix of iconPrefixes) if (originalname.startsWith(prefix)) return "icon";
-  for (const prefix of promoPrefixes) if (originalname.startsWith(prefix)) return "promo";
-  if (originalname.startsWith(trailerPrefix)) return "trailer";
-  return "other";
+  for (const prefix of screenshotPrefixes) if (originalname.startsWith(prefix)) return MediaType.SCREENSHOT;
+  for (const prefix of iconPrefixes) if (originalname.startsWith(prefix)) return MediaType.ICON;
+  for (const prefix of promoPrefixes) if (originalname.startsWith(prefix)) return MediaType.PROMO;
+  if (originalname.startsWith(trailerPrefix)) return MediaType.TRAILER;
+  return MediaType.OTHER;
 }
 
 function dataURLtoBlob(dataurl) {
@@ -207,135 +241,38 @@ function dataURLtoBlob(dataurl) {
   return new Blob([u8arr], { type: mime });
 }
 
-async function loadServerScreenshots(sessionId, mediaFiles, mediaBase) {
-  const screenshotFiles = mediaFiles.filter(f => getMediaType(f) === "screenshot");
-  const fetches = screenshotFiles.map(originalname =>
-    fetch(`${mediaBase.replace(/\/$/, '')}/${originalname}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.files && data.files.length) {
-          return {
-            originalname: data.files[0].originalname,
-            buffer: data.files[0].buffer,
-            dataUrl: `data:image/png;base64,${data.files[0].buffer}`
-          };
-        }
-        return null;
-      })
-  );
-  const results = await Promise.all(fetches);
-  return results.filter(Boolean);
-}
-
-async function loadIconDataUrl(mediaBase, iconFile) {
-  if (!iconFile) return null;
-  const iconRes = await fetch(`${mediaBase.replace(/\/$/, '')}/${iconFile}`);
-  const iconData = await iconRes.json();
-  if (iconData.files && iconData.files.length) {
-    return `data:image/png;base64,${iconData.files[0].buffer}`;
+async function addListing() {
+  const lang = prompt("Enter new language code (e.g. 'en', 'fr', 'de'):");
+  if (!lang) return;
+  if (!metadata.listings) metadata.listings = {};
+  if (metadata.listings[lang]) {
+    alert("Listing already exists for this language.");
+    return;
   }
-  return null;
+  metadata.listings[lang] = {
+    baseListing: {
+      title: '',
+      description: '',
+      features: [],
+      releaseNotes: '',
+      minimumHardware: [],
+      genres: [],
+      screenshots: [],
+      icon: null,
+      promo: [],
+      trailer: null,
+      trailerImage: null
+    },
+    platformOverrides: {}
+  };
+  currentListingKey = lang;
+  populateListingDropdown();
+  await loadListing();
 }
-
-function renderMediaGrid(containerId, arr, base, label) {
-  const container = document.getElementById(containerId);
-  container.innerHTML = '';
-  arr.forEach((file) => {
-    const isDataUrl = typeof file === 'string' && file.startsWith('data:');
-    const isFullUrl = typeof file === 'string' && file.startsWith('http');
-    const ext = isDataUrl ? '' : (typeof file === 'string' ? file.split('.').pop().toLowerCase() : '');
-    const wrap = document.createElement('div');
-    wrap.className = 'media-thumb';
-    let mediaElem;
-    if (!isDataUrl && !isFullUrl && ['mp4', 'webm'].includes(ext)) {
-      mediaElem = document.createElement('video');
-      mediaElem.src = base + file;
-      mediaElem.controls = true;
-    } else {
-      mediaElem = document.createElement('img');
-      mediaElem.src = isDataUrl || isFullUrl ? file : (base + file);
-    }
-    wrap.appendChild(mediaElem);
-    const lbl = document.createElement('span');
-    lbl.className = 'media-label';
-    lbl.innerText = label;
-    wrap.appendChild(lbl);
-    container.appendChild(wrap);
-  });
-}
-
-function renderIcon(iconDataUrl) {
-  const iconDiv = document.getElementById('icon');
-  iconDiv.innerHTML = '';
-  if (iconDataUrl) {
-    const img = document.createElement('img');
-    img.src = iconDataUrl;
-    img.alt = 'App Icon';
-    iconDiv.appendChild(img);
-  } else {
-    // default placeholder if no icon is set
-    iconDiv.innerHTML = '<div style="width:120px;height:120px;background:#e0e0e0;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:1.2rem;">No Icon</div>';
-  }
-}
-
-
-function uploadScreenshots() {
-  const input = document.getElementById('screenshotUpload');
-  if (!input.files.length) return;
-
-  // Read all files as data URLs in parallel
-  const fileReaders = Array.from(input.files).map(file => {
-    return new Promise(resolve => {
-      const reader = new FileReader();
-      reader.onload = e => resolve(e.target.result);
-      reader.readAsDataURL(file);
-    });
-  });
-
-  Promise.all(fileReaders).then(results => {
-    previewScreenshotsArr = results;
-    renderMediaGrid('screenshots', [
-      ...serverScreenshotsArr.map(f => f.dataUrl),
-      ...previewScreenshotsArr
-    ], '', "Screenshot");
-  });
-}
-
-function renderList(type, arr) {
-  const ul = document.getElementById(type);
-  ul.innerHTML = '';
-  arr.forEach((item, idx) => {
-    const li = document.createElement('li');
-    li.innerHTML = `<input value="${item}" onchange="updateListItem('${type}', ${idx}, this.value)" />
-      <button class="remove-btn" onclick="removeListItem('${type}', ${idx})">&times;</button>`;
-    ul.appendChild(li);
-  });
-}
-
-function addListItem(type) {
-  if (type === 'features') featuresArr.push('');
-  if (type === 'hardware') hardwareArr.push('');
-  if (type === 'genres') genresArr.push('');
-  renderList(type, type === 'features' ? featuresArr : type === 'hardware' ? hardwareArr : genresArr);
-}
-
-function removeListItem(type, idx) {
-  if (type === 'features') featuresArr.splice(idx, 1);
-  if (type === 'hardware') hardwareArr.splice(idx, 1);
-  if (type === 'genres') genresArr.splice(idx, 1);
-  renderList(type, type === 'features' ? featuresArr : type === 'hardware' ? hardwareArr : genresArr);
-}
-function updateListItem(type, idx, value) {
-  if (type === 'features') featuresArr[idx] = value;
-  if (type === 'hardware') hardwareArr[idx] = value;
-  if (type === 'genres') genresArr[idx] = value;
-}
-window.addListItem = addListItem;
-window.removeListItem = removeListItem;
-window.updateListItem = updateListItem;
 
 function populateListingDropdown() {
   const select = document.getElementById('listingSelect');
+  if (!select) return;
   select.innerHTML = '';
   const keys = Object.keys(metadata.listings || {});
   keys.forEach(key => {
@@ -350,26 +287,136 @@ function populateListingDropdown() {
   select.value = currentListingKey;
 }
 
-function switchListing(key) {
-  saveCurrentListing();
-  currentListingKey = key;
-  loadListing();
+async function removeListing() {
+  if (!currentListingKey || !metadata.listings || !metadata.listings[currentListingKey]) return;
+  if (Object.keys(metadata.listings).length === 1) {
+    alert("At least one listing is required.");
+    return;
+  }
+  if (!confirm(`Remove listing for "${currentListingKey}"?`)) return;
+  delete metadata.listings[currentListingKey];
+  const keys = Object.keys(metadata.listings);
+  currentListingKey = keys[0];
+  populateListingDropdown();
+  await loadListing();
 }
 
-function saveCurrentListing() {
-  if (!currentListingKey || !metadata.listings[currentListingKey]) return;
-  const listing = metadata.listings[currentListingKey];
-  listing.baseListing = {
-    ...listing.baseListing,
-    title: document.getElementById('title').value,
-    description: document.getElementById('description').value,
-    features: featuresArr.filter(f => f.trim()),
-    releaseNotes: document.getElementById('releaseNotes').value,
-    minimumHardware: hardwareArr.filter(h => h.trim())
+// Render screenshots (no type check needed)
+
+function renderIcon(dataUrl) {
+  const iconDiv = document.getElementById('icon');
+  // Remove any previous icon image
+  const oldImg = iconDiv.querySelector('img');
+  if (oldImg) iconDiv.removeChild(oldImg);
+  if (dataUrl) {
+    const img = document.createElement('img');
+    img.src = dataUrl;
+    img.alt = "App Icon";
+    img.style.maxWidth = "120px";
+    img.style.maxHeight = "120px";
+    img.style.display = "block";
+    img.style.marginBottom = "8px";
+    iconDiv.insertBefore(img, iconDiv.firstChild);
+  }
+}
+
+function renderList(containerId, arr) {
+  const ul = document.getElementById(containerId);
+  ul.innerHTML = '';
+  arr.forEach((item, idx) => {
+    const li = document.createElement('li');
+    const input = document.createElement('input');
+    input.value = item;
+    input.oninput = function() {
+      arr[idx] = input.value;
+    };
+    li.appendChild(input);
+
+    const delBtn = document.createElement('button');
+    delBtn.className = 'remove-btn';
+    delBtn.innerHTML = '&times;';
+    delBtn.onclick = function() {
+      arr.splice(idx, 1);
+      renderList(containerId, arr);
+    };
+    li.appendChild(delBtn);
+
+    ul.appendChild(li);
+  });
+}
+async function uploadTrailerImage() {
+  const input = document.getElementById('trailerImageUpload');
+  if (!input.files.length) return;
+  const file = input.files[0];
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    trailerImageArr = [{ file, dataUrl: e.target.result }];
+    if (metadata.listings && metadata.listings[currentListingKey]) {
+      metadata.listings[currentListingKey].baseListing.trailerImage = trailerImageArr[0];
+    }
+    renderMediaGrid('trailerImageMedia', trailerImageArr, '', "Trailer Image");
   };
+  reader.readAsDataURL(file);
 }
 
-function loadListing() {
+function renderMediaGrid(containerId, arr, base, label) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  arr.forEach((item, idx) => {
+    const src = item.dataUrl;
+    const wrap = document.createElement('div');
+    wrap.className = 'media-thumb';
+    let mediaElem;
+    if (src.startsWith('data:')) {
+      mediaElem = document.createElement('img');
+      mediaElem.src = src;
+    } else if (src.endsWith('.mp4') || src.endsWith('.webm')) {
+      mediaElem = document.createElement('video');
+      mediaElem.src = base + src;
+      mediaElem.controls = true;
+    } else {
+      mediaElem = document.createElement('img');
+      mediaElem.src = base + src;
+    }
+    wrap.appendChild(mediaElem);
+    const lbl = document.createElement('span');
+    lbl.className = 'media-label';
+    lbl.innerText = label;
+    wrap.appendChild(lbl);
+
+    // Delete button
+    if (containerId === 'screenshots') {
+      const delBtn = document.createElement('button');
+      delBtn.className = 'remove-btn';
+      delBtn.innerHTML = '&times;';
+      delBtn.style.position = 'absolute';
+      delBtn.style.top = '4px';
+      delBtn.style.right = '4px';
+      delBtn.onclick = function() {
+        deleteScreenshot(idx);
+      };
+      wrap.appendChild(delBtn);
+    }
+    container.appendChild(wrap);
+  });
+}
+
+
+// --- Helper to get current baseListing ---
+function getCurrentBaseListing() {
+  if (!metadata.listings) return {};
+  if (!metadata.listings[currentListingKey]) return {};
+  return metadata.listings[currentListingKey].baseListing;
+}
+
+function belongs_to_listing(fileName, listingKey) {
+  if (!fileName || !listingKey) return false;
+  const locale = fileName.split('_')[1];
+  return locale === listingKey || locale === "all";
+}
+
+// --- Load listing and all per-listing media ---
+async function loadListing() {
   if (!currentListingKey || !metadata.listings || !metadata.listings[currentListingKey]) {
     baseListing = {};
     document.getElementById('title').value = '';
@@ -379,6 +426,18 @@ function loadListing() {
     document.getElementById('releaseNotes').value = '';
     hardwareArr = [];
     renderList('hardware', hardwareArr);
+    genresArr = [];
+    renderList('genres', genresArr);
+    screenshotsArr = [];
+    iconDataUrl = null;
+    promoArr = [];
+    trailerArr = [];
+    trailerImageArr = [];
+    renderMediaGrid('screenshots', [], '', "Screenshot");
+    renderIcon('');
+    renderMediaGrid('promoMedia', [], '', "Promo");
+    renderMediaGrid('trailerMedia', [], '', "Trailer");
+    renderMediaGrid('trailerImageMedia', [], '', "Trailer Image");
     return;
   }
   const listing = metadata.listings[currentListingKey];
@@ -390,69 +449,113 @@ function loadListing() {
   document.getElementById('releaseNotes').value = baseListing.releaseNotes || '';
   hardwareArr = baseListing.minimumHardware ? [...baseListing.minimumHardware] : [];
   renderList('hardware', hardwareArr);
-}
+  genresArr = baseListing.genres ? [...baseListing.genres] : [];
+  renderList('genres', genresArr);
 
-function addListing() {
-  const lang = prompt("Enter new language code (e.g. 'fr', 'es', 'de'):");
-  if (!lang) return;
-  if (!metadata.listings) metadata.listings = {};
-  if (metadata.listings[lang]) {
-    alert("Listing already exists for this language.");
-    return;
+  // --- Screenshots ---
+  if (!baseListing.screenshots || !baseListing.screenshots.length) {
+    // Find all screenshot files for this locale
+    const screenshotFiles = allMediaFiles.filter(f => getMediaType(f) === MediaType.SCREENSHOT && belongs_to_listing(f,currentListingKey));
+    screenshotsArr = [];
+    for (const file of screenshotFiles) {
+      const obj = await fetchMediaAsDataUrl(mediaBase, file);
+      if (obj) screenshotsArr.push(obj);
+    }
+    baseListing.screenshots = screenshotsArr;
+  } else {
+    screenshotsArr = [...baseListing.screenshots];
   }
-  metadata.listings[lang] = {
-    baseListing: {
-      title: '',
-      description: '',
-      features: [],
-      releaseNotes: '',
-      minimumHardware: []
-    },
-    platformOverrides: {}
-  };
-  currentListingKey = lang;
-  populateListingDropdown();
-  loadListing();
-}
+  renderMediaGrid('screenshots', screenshotsArr, '', "Screenshot");
 
-function removeListing() {
-  if (!currentListingKey) return;
-  const keys = Object.keys(metadata.listings || {});
-  if (keys.length <= 1) {
-    alert("At least one listing must remain.");
-    return;
+  // --- Icon ---
+  if (!baseListing.icon) {
+    const iconFileName = allMediaFiles.find(f => getMediaType(f) === MediaType.ICON && belongs_to_listing(f,currentListingKey));
+    if (iconFileName) {
+      const obj = await fetchMediaAsDataUrl(mediaBase, iconFileName);
+      iconDataUrl = obj ? obj.dataUrl : null;
+      iconFile = null;
+      baseListing.icon = obj;
+    } else {
+      iconDataUrl = null;
+      iconFile = null;
+    }
+  } else {
+    iconDataUrl = baseListing.icon.dataUrl;
+    iconFile = baseListing.icon.file || null;
   }
-  if (!confirm(`Are you sure you want to remove the "${currentListingKey}" listing?`)) return;
-  delete metadata.listings[currentListingKey];
-  const newKeys = Object.keys(metadata.listings);
-  currentListingKey = newKeys[0];
-  populateListingDropdown();
-  loadListing();
+  renderIcon(iconDataUrl);
+
+  // --- Trailer ---
+  if (!baseListing.trailer) {
+    const trailerFileName = allMediaFiles.find(f => getMediaType(f) === MediaType.TRAILER && belongs_to_listing(f,currentListingKey));
+    if (trailerFileName) {
+      const obj = await fetchMediaAsDataUrl(mediaBase, trailerFileName);
+      trailerArr = obj ? [obj] : [];
+      baseListing.trailer = obj;
+    } else {
+      trailerArr = [];
+    }
+  } else {
+    trailerArr = [baseListing.trailer];
+  }
+  renderMediaGrid('trailerMedia', trailerArr, '', "Trailer");
+
+  // --- Trailer Image ---
+  if (!baseListing.trailerImage) {
+    const trailerImageFileName = allMediaFiles.find(f => getMediaType(f) === MediaType.TRAILER_IMAGE && belongs_to_listing(f,currentListingKey));
+    if (trailerImageFileName) {
+      const obj = await fetchMediaAsDataUrl(mediaBase, trailerImageFileName);
+      trailerImageArr = obj ? [obj] : [];
+      baseListing.trailerImage = obj;
+    } else {
+      trailerImageArr = [];
+    }
+  } else {
+    trailerImageArr = [baseListing.trailerImage];
+  }
+  renderMediaGrid('trailerImageMedia', trailerImageArr, '', "Trailer Image");
+
+  // --- Promo ---
+  promoArr = [];
+  const promoFiles = allMediaFiles.filter(f => getMediaType(f) === MediaType.PROMO && belongs_to_listing(f,currentListingKey));
+  for (const file of promoFiles) {
+    const obj = await fetchMediaAsDataUrl(mediaBase, file);
+    if (obj) promoArr.push(obj);
+  }
+  baseListing.promo = promoArr;
+  renderMediaGrid('promoMedia', promoArr, '', "Promo");
 }
 
+// --- Helper: fetch media file as data URL from backend ---
+async function fetchMediaAsDataUrl(mediaBase, fileName) {
+  if (!fileName) return null;
+  try {
+    const res = await fetch(`${mediaBase.replace(/\/$/, '')}/${fileName}`);
+    const data = await res.json();
+    if (data.files && data.files.length) {
+      // Guess type from file extension
+      let type = "image/png";
+      if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) type = "image/jpeg";
+      if (fileName.endsWith(".webp")) type = "image/webp";
+      if (fileName.endsWith(".mp4")) type = "video/mp4";
+      if (fileName.endsWith(".webm")) type = "video/webm";
+      return { dataUrl: `data:${type};base64,${data.files[0].buffer}` };
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
+
+// --- When loading, set per-listing media arrays and call loadListing as async ---
 async function initialLoad() {
   const data = await fetch(`/session/${sessionId}`).then(res => res.json());
   metadata = data.metadata;
   populateListingDropdown();
-  loadListing();
+  await loadListing();
   document.getElementById('pricing').value = (metadata.pricing && metadata.pricing.priceId) || 'Free';
   mediaBase = data.mediaBase || `/media/${sessionId}/`;
   allMediaFiles = Array.isArray(data.mediaFiles) ? data.mediaFiles : [];
-  serverScreenshotsArr = await loadServerScreenshots(sessionId, allMediaFiles, mediaBase);
-  renderMediaGrid('screenshots', [
-    ...serverScreenshotsArr.map(f => f.dataUrl),
-    ...previewScreenshotsArr
-  ], '', "Screenshot");
-  promoArr = [];
-  iconFile = null;
-  for (const file of allMediaFiles) {
-    const type = getMediaType(file);
-    if (type === "promo") promoArr.push(file);
-    else if (type === "icon" && !iconFile) iconFile = file;
-  }
-  renderMediaGrid('promoMedia', promoArr, mediaBase, "Promo");
-  iconDataUrl = await loadIconDataUrl(mediaBase, iconFile);
-  renderIcon(iconDataUrl);
   genresArr = (metadata.gamingOptions && metadata.gamingOptions[0] && metadata.gamingOptions[0].genres) ? [...metadata.gamingOptions[0].genres] : [];
   renderList('genres', genresArr);
   document.getElementById('category').value = metadata.applicationCategory || '';
@@ -465,65 +568,151 @@ async function initialLoad() {
   document.getElementById('accessibility').value = metadata.meetAccessibilityGuidelines ? 'true' : 'false';
 }
 
+// --- Switch listing: save current, switch, load new ---
+async function switchListing(lang) {
+  saveCurrentListing();
+  currentListingKey = lang;
+  await loadListing();
+}
+
+function saveCurrentListing() {
+  if (!currentListingKey || !metadata.listings || !metadata.listings[currentListingKey]) return;
+  const baseListing = metadata.listings[currentListingKey].baseListing;
+  baseListing.title = document.getElementById('title').value;
+  baseListing.description = document.getElementById('description').value;
+  baseListing.features = [...featuresArr];
+  baseListing.releaseNotes = document.getElementById('releaseNotes').value;
+  baseListing.minimumHardware = [...hardwareArr];
+  baseListing.genres = [...genresArr];
+  baseListing.screenshots = [...screenshotsArr];
+  baseListing.icon = iconDataUrl ? { dataUrl: iconDataUrl, file: iconFile } : null;
+  baseListing.promo = [...promoArr];
+  baseListing.trailer = trailerArr.length ? trailerArr[0] : null;
+  baseListing.trailerImage = trailerImageArr.length ? trailerImageArr[0] : null;
+}
+
+
+// --- Delete screenshot: remove from per-listing screenshotsArr and save ---
+function deleteScreenshot(idx) {
+  screenshotsArr.splice(idx, 1);
+  saveCurrentListing();
+  renderMediaGrid('screenshots', screenshotsArr, '', "Screenshot");
+}
+
+async function uploadScreenshots() {
+  const input = document.getElementById('screenshotUpload');
+  if (!input.files.length) return;
+  const fileReaders = Array.from(input.files).map(file => {
+    return new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = e => resolve({
+        file,
+        dataUrl: e.target.result
+      });
+      reader.readAsDataURL(file);
+    });
+  });
+  const results = await Promise.all(fileReaders);
+  screenshotsArr = screenshotsArr.concat(results);
+  if (metadata.listings && metadata.listings[currentListingKey]) {
+    metadata.listings[currentListingKey].baseListing.screenshots = screenshotsArr;
+  }
+  renderMediaGrid('screenshots', screenshotsArr, '', "Screenshot");
+}
+
 function saveNonListingMetadata() {
-  metadata.pricing = metadata.pricing || {};
-  metadata.pricing.priceId = document.getElementById('pricing').value;
+  // Save non-listing metadata fields from the UI back to the metadata object
   metadata.applicationCategory = document.getElementById('category').value;
   metadata.visibility = document.getElementById('visibility').value;
   metadata.targetPublishMode = document.getElementById('publishMode').value;
   metadata.targetPublishDate = document.getElementById('publishDate').value;
+  if (!metadata.pricing) metadata.pricing = {};
+  metadata.pricing.priceId = document.getElementById('pricing').value;
   metadata.pricing.trialPeriod = document.getElementById('trial').value;
   metadata.automaticBackupEnabled = document.getElementById('backup').value === 'true';
   metadata.hasExternalInAppProducts = document.getElementById('inapp').value === 'true';
   metadata.meetAccessibilityGuidelines = document.getElementById('accessibility').value === 'true';
+  // Save genres if needed for gamingOptions
+  // if (!metadata.gamingOptions) metadata.gamingOptions = [{}];
+  // metadata.gamingOptions[0].genres = [...genresArr];
 }
 
-function getLocaleFromFilename(filename) {
-  // Matches {Type}_{locale}_rest.ext or {Type}_all_rest.ext
-  const match = filename.match(/^[^_]+_([a-zA-Z\-]+)_/);
-  return match ? match[1] : null;
-}
-
-function handleMediaUploads(input, formData, allLocales, currentLocale,typePrefix = 'Screenshot') {
-  if (!input || !input.files.length) return;
-  Array.from(input.files).forEach(file => {
-    let locale = currentLocale;
-    let baseName = file.name.replace(/^[^_]+_[a-zA-Z\-]+_/, '');
-    const newName = `${typePrefix}_${locale}_${baseName}`;
-    formData.append('files', file, newName);
-  });
-}
-
+// --- Approve: upload only current listing's media ---
 async function approve() {
   saveCurrentListing();
   saveNonListingMetadata();
+  const currentLocale = currentListingKey || 'en';
+  // Remove all media references from all listings before saving
+  if (metadata.listings) {
+    for (const lang in metadata.listings) {
+      const bl = metadata.listings[lang].baseListing;
+      delete bl.images;
+      delete metadata.trailers;
+    }
+  }
+  console.log(JSON.stringify(metadata,null,2));
   const formData = new FormData();
   formData.append('metadata', JSON.stringify(metadata));
-  const allLocales = Object.keys(metadata.listings || {});
-  const currentLocale = currentListingKey || 'en';
-
   // Screenshots
-  const screenshotInput = document.getElementById('screenshotUpload');
-  handleMediaUploads(screenshotInput, formData, allLocales, currentLocale,"Screenshot");
+  (screenshotsArr || []).forEach(item => {
+    if (item.file) {
+      let file = item.file;
+      let baseName = file.name.replace(/^[^_]+_[a-zA-Z\-]+_/, '');
+      const newName = `Screenshot_${currentLocale}_${baseName}`;
+      formData.append('files', file, newName);
+    }
+  });
 
-  // Icon upload (if you have an icon file input)
-  const iconInput = document.getElementById('iconUpload');
-  handleMediaUploads(iconInput, formData, allLocales, currentLocale,"Icon");
+  // Icon
+  if (iconFile) {
+    let baseName = iconFile.name.replace(/^[^_]+_[a-zA-Z\-]+_/, '');
+    const newName = `Icon_${currentLocale}_${baseName}`;
+    formData.append('files', iconFile, newName);
+  }
 
-  // Add similar lines for other media inputs if needed
+  // Trailer video
+  if (trailerArr.length && trailerArr[0].file) {
+    const file = trailerArr[0].file;
+    let baseName = file.name.replace(/^[^_]+_[a-zA-Z\-]+_/, '');
+    const newName = `Trailer_${currentLocale}_${baseName}`;
+    formData.append('files', file, newName);
+  }
+
+  // Trailer image
+  if (trailerImageArr.length && trailerImageArr[0].file) {
+    const file = trailerImageArr[0].file;
+    let baseName = file.name.replace(/^[^_]+_[a-zA-Z\-]+_/, '');
+    const newName = `TrailerImage_${currentLocale}_${baseName}`;
+    formData.append('files', file, newName);
+  }
+
+  // TODO: Add promo and other media as needed
 
   await fetch(`/${sessionId}/complete`, {
     method: 'POST',
     body: formData
   }).then(res => res.json());
-  previewScreenshotsArr = [];
+  screenshotsArr = [];
+  iconDataUrl = null;
+  iconFile = null;
+  trailerArr = [];
+  trailerImageArr = [];
   await initialLoad();
   alert("Saved and Approved!");
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-  await initialLoad();
-});
+// --- Debug: log metadata and media files ---
+function debugLog() {
+  console.log("Metadata:", metadata);
+  console.log("Media Files:", allMediaFiles);
+}
+initialLoad().then(() => {
+    alert("Metadata and media files saved successfully!");
+    debugLog();
+  }).catch(err => {
+    console.error("Error saving metadata:", err);
+    alert("Failed to save metadata. Check console for details.");
+  });;
 </script>
 
 
