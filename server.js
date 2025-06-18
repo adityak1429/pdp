@@ -182,6 +182,20 @@ app.get('/:sessionId', (req, res) => {
    });
 });
 
+app.get('/', (req, res) => {
+  res.send(`
+    <h1>Media Upload Server</h1>
+    <p>Use the following endpoints:</p>
+    <ul>
+      <li><strong>Upload:</strong> POST /upload</li>
+      <li><strong>Poll:</strong> GET /:sessionId/poll</li>
+      <li><strong>Complete:</strong> POST /:sessionId/complete</li>
+      <li><strong>Get Metadata:</strong> GET /:sessionId</li>
+      <li><strong>Get Media Files:</strong> GET /:sessionId/media/</li>
+    </ul>
+  `);
+});
+
 import cron from 'node-cron';
 
 // Cleanup job: runs every day at 2:30 AM
