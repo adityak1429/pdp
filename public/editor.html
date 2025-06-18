@@ -7,31 +7,198 @@
   <style>
     body { font-family: 'Segoe UI', Arial, sans-serif; background: #f3f3f3; margin: 0; padding: 0; color: #222; }
     .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 32px 40px 40px 40px; }
-    .hero { display: flex; gap: 32px; align-items: flex-start; margin-bottom: 32px; }
-    .hero-media img { border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.10); max-width: 120px; max-height: 120px; background: #eee; display: block; }
-    .hero-details { flex: 1; }
-    .app-title-input, .app-desc-input { width: 100%; border: none; border-bottom: 2px solid #0078d7; font-size: 2.2rem; font-weight: 600; margin: 0 0 8px 0; color: #0078d7; outline: none; background: transparent; resize: none; }
-    .app-desc-input { font-size: 1.1rem; font-weight: 400; color: #444; margin-bottom: 16px; border-bottom: 1px solid #aaa; min-height: 40px; }
-    .pricing-input { font-size: 1.1rem; color: #0078d7; font-weight: 600; border: none; background: transparent; outline: none; border-bottom: 1px solid #0078d7; margin-bottom: 16px; }
-    .approve-btn { background: #0078d7; color: #fff; border: none; border-radius: 4px; padding: 12px 32px; font-size: 1.1rem; font-weight: 500; cursor: pointer; margin-top: 24px; float: right; transition: background 0.2s; }
-    .approve-btn:hover { background: #005fa1; }
-    .section { margin-bottom: 32px; }
-    .section-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; color: #222; border-left: 4px solid #0078d7; padding-left: 10px; }
-    .editable-list { list-style: disc inside; margin: 0 0 0 16px; padding: 0; color: #333; }
-    .editable-list li { margin-bottom: 6px; display: flex; align-items: center; }
-    .editable-list input { flex: 1; border: none; border-bottom: 1px solid #aaa; background: transparent; font-size: 1rem; margin-right: 8px; outline: none; }
-    .add-btn, .remove-btn { background: #eee; border: none; color: #0078d7; font-size: 1.1rem; cursor: pointer; border-radius: 3px; margin-left: 4px; padding: 2px 8px; transition: background 0.2s; }
-    .add-btn:hover, .remove-btn:hover { background: #0078d7; color: #fff; }
-    .meta-table { border-collapse: collapse; width: 100%; margin-top: 8px; }
-    .meta-table th, .meta-table td { text-align: left; padding: 6px 10px; border-bottom: 1px solid #eee; font-size: 1rem; }
-    .meta-table th { color: #666; font-weight: 500; width: 180px; }
-    .meta-table input, .meta-table select { width: 100%; border: none; border-bottom: 1px solid #aaa; background: transparent; font-size: 1rem; outline: none; }
-    .clear { clear: both; }
-    textarea { font-family: inherit; }
-    .media-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
-    .media-thumb { position: relative; width: 120px; height: 70px; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.10); background: #eee; display: flex; align-items: center; justify-content: center; }
-    .media-thumb img, .media-thumb video { width: 100%; height: 100%; object-fit: cover; }
-    .media-label { position: absolute; bottom: 2px; left: 2px; background: rgba(0,0,0,0.6); color: #fff; font-size: 0.75rem; padding: 1px 4px; border-radius: 3px; pointer-events: none; }
+    .hero {
+  background: #f8fafd;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,120,215,0.07);
+  padding: 32px 32px 24px 32px;
+  margin-bottom: 36px;
+  align-items: flex-start;
+}
+
+.hero-media img {
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,120,215,0.10);
+  max-width: 140px;
+  max-height: 140px;
+  background: #e6e6e6;
+  border: 2px solid #e6e6e6;
+}
+
+.hero-details {
+  padding-top: 8px;
+}
+
+.app-title-input {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #222;
+  border-bottom: 2px solid #0078d7;
+  margin-bottom: 8px;
+  background: transparent;
+}
+
+.app-desc-input {
+  font-size: 1.15rem;
+  color: #444;
+  border-bottom: 1px solid #b0b0b0;
+  margin-bottom: 18px;
+  background: transparent;
+}
+
+.pricing-input {
+  font-size: 1.15rem;
+  color: #0078d7;
+  font-weight: 600;
+  border-bottom: 1px solid #0078d7;
+  margin-bottom: 18px;
+  background: transparent;
+}
+
+.approve-btn {
+  background: linear-gradient(90deg, #0078d7 60%, #005fa1 100%);
+  color: #fff;
+  border-radius: 24px;
+  padding: 12px 40px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,120,215,0.08);
+  margin-top: 32px;
+  float: right;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.approve-btn:hover {
+  background: #005fa1;
+  box-shadow: 0 4px 16px rgba(0,120,215,0.15);
+}
+
+.section-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #222;
+  border-left: 5px solid #0078d7;
+  padding-left: 12px;
+  margin-bottom: 14px;
+  letter-spacing: 0.5px;
+}
+
+.section {
+  background: #f8fafd;
+  border-radius: 10px;
+  box-shadow: 0 1px 8px rgba(0,120,215,0.04);
+  padding: 20px 24px 18px 24px;
+  margin-bottom: 32px;
+}
+
+.media-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 18px;
+  margin-bottom: 16px;
+  padding-bottom: 4px;
+}
+
+.media-thumb {
+  width: 220px;
+  height: 124px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,120,215,0.10);
+  background: #e6e6e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: box-shadow 0.2s;
+}
+
+.media-thumb:hover {
+  box-shadow: 0 4px 24px rgba(0,120,215,0.18);
+}
+
+.media-thumb img, .media-thumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.media-label {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  background: rgba(0,120,215,0.85);
+  color: #fff;
+  font-size: 0.85rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  pointer-events: none;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+.add-btn, .remove-btn {
+  border-radius: 18px;
+  padding: 4px 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-left: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.add-btn {
+  background: #e6f0fa;
+  color: #0078d7;
+}
+
+.add-btn:hover {
+  background: #0078d7;
+  color: #fff;
+}
+
+.remove-btn {
+  background: #f8d7da;
+  color: #a71d2a;
+}
+
+.remove-btn:hover {
+  background: #a71d2a;
+  color: #fff;
+}
+
+.meta-table th {
+  color: #0078d7;
+  font-weight: 600;
+  width: 180px;
+}
+
+.meta-table input, .meta-table select {
+  border-radius: 6px;
+  background: #f3f3f3;
+  border: 1px solid #b0b0b0;
+  padding: 4px 8px;
+  font-size: 1rem;
+}
+
+.editable-list input {
+  border-radius: 6px;
+  background: #f3f3f3;
+  border: 1px solid #b0b0b0;
+  padding: 4px 8px;
+  font-size: 1rem;
+}
+
+::-webkit-scrollbar {
+  height: 8px;
+  background: #e6e6e6;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: #b0b0b0;
+  border-radius: 4px;
+}
   </style>
 </head>
 <body>
@@ -65,10 +232,6 @@
     <button class="add-btn" onclick="uploadScreenshots()">Upload Screenshots</button>
   </div>
 
-  <div class="section">
-    <div class="section-title">Promotional Art & Media</div>
-    <div id="promoMedia" class="media-grid"></div>
-  </div>
 
   <div class="section">
     <div class="section-title">features</div>
@@ -87,18 +250,91 @@
     <button class="add-btn" onclick="addListItem('hardware')">+ Add Hardware</button>
   </div>
 
-  <div class="section">
-    <div class="section-title">Genres</div>
-    <ul class="editable-list" id="genres"></ul>
-    <button class="add-btn" onclick="addListItem('genres')">+ Add Genre</button>
-  </div>
 
   <div class="section">
     <div class="section-title">App Details</div>
     <table class="meta-table">
       <tr>
         <th>Category</th>
-        <td><input id="category" /></td>
+        <td>
+          <select id="category" onchange="updateSubcategories()" >
+            <option value="BooksAndReference">Books + reference</option>
+            <option value="Business">Business</option>
+            <option value="DeveloperTools">Developer tools</option>
+            <option value="Education">Education</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="FoodAndDining">Food + dining</option>
+            <option value="GovernmentAndPolitics">Government + politics</option>
+            <option value="HealthAndFitness">Health + fitness</option>
+            <option value="KidsAndFamily">Kids + family</option>
+            <option value="Lifestyle">Lifestyle</option>
+            <option value="Medical">Medical</option>
+            <option value="Multimedia design">Multimedia design</option>
+            <option value="Music">Music</option>
+            <option value="NavigationMaps">Navigation + maps</option>
+            <option value="NewsAndWeather">News + weather</option>
+            <option value="PersonalFinance">Personal finance</option>
+            <option value="Personalization">Personalization</option>
+            <option value="PhotoAndVideo">Photo + video</option>
+            <option value="Productivity">Productivity</option>
+            <option value="Security">Security</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Social">Social</option>
+            <option value="Sports">Sports</option>
+            <option value="Travel">Travel</option>
+            <option value="UtilitiesAndTools">Utilities + tools</option>
+          </select>
+          <select id="subcategory" style="margin-left:8px;">
+            <option value="">Select Subcategory</option>
+          </select>
+        </td>
+      <script>
+      const categorySubcategories = {
+        "BooksAndReference": ["E-reader", "Fiction", "Nonfiction", "Reference"],
+        "Business": ["Accounting + finance", "Collaboration", "CRM", "Data + analytics", "File management", "Inventory + logistics", "Legal + HR", "Project management", "Remote desktop", "Sales + marketing", "Time + expenses"],
+        "Developer tools": ["Database", "Design tools", "Development kits", "Networking", "Reference + training", "Servers", "Utilities", "Web hosting"],
+        "Education": ["Books + reference", "Early learning", "Instructional tools", "Language", "Study aids"],
+        "Entertainment": [],
+        "Food + dining": [],
+        "Government + politics": [],
+        "Health + fitness": [],
+        "Kids + family": ["Books + reference", "Entertainment", "Hobbies + toys", "Sports + activities", "Travel"],
+        "Lifestyle": ["Automotive", "DIY", "Home + garden", "Relationships", "Special interest", "Style + fashion"],
+        "Medical": [],
+        "Multimedia design": ["Illustration + graphic design", "Music production", "Photo + video production"],
+        "Music": [],
+        "Navigation + maps": [],
+        "News + weather": ["News", "Weather"],
+        "Personal finance": ["Banking + investments", "Budgeting + taxes"],
+        "Personalization": ["Ringtones + sounds", "Themes", "Wallpaper + lock screens"],
+        "Photo + video": [],
+        "Productivity": [],
+        "Security": ["PC protection", "Personal security"],
+        "Shopping": [],
+        "Social": [],
+        "Sports": [],
+        "Travel": ["City guides", "Hotels"],
+        "Utilities + tools": ["Backup + manage", "File managers"]
+      };
+
+      function updateSubcategories() {
+        const cat = document.getElementById('category').value;
+        const subcat = document.getElementById('subcategory');
+        subcat.innerHTML = '<option value="">Select Subcategory</option>';
+        if (categorySubcategories[cat] && categorySubcategories[cat].length > 0) {
+          categorySubcategories[cat].forEach(sc => {
+            const opt = document.createElement('option');
+            opt.value = sc;
+            opt.textContent = sc;
+            subcat.appendChild(opt);
+          });
+          subcat.disabled = false;
+        } else {
+          subcat.disabled = true;
+        }
+      }
+      document.addEventListener('DOMContentLoaded', updateSubcategories);
+      </script>
       </tr>
       <tr>
         <th>Visibility</th>
@@ -163,557 +399,17 @@
     <input type="file" id="trailerUpload" accept="video/mp4,video/webm" style="margin-bottom:16px;">
     <button class="add-btn" onclick="uploadTrailer()">Upload Trailer</button>
   </div>
-
+  
   <div class="section">
-    <div class="section-title">Trailer Image</div>
-    <div id="trailerImageMedia" class="media-grid"></div>
     <input type="file" id="trailerImageUpload" accept="image/*" style="margin-bottom:16px;">
     <button class="add-btn" onclick="uploadTrailerImage()">Upload Trailer Image</button>
+    <div class="section-title">Trailer Image</div>
+    <div id="trailerImageMedia" class="media-grid"></div>
   </div>
 </div>
 
 
-
-
-<script>
-
-const sessionId = new URLSearchParams(window.location.search).get('session');
-if (!sessionId) {
-  alert("Session ID is required in the URL (e.g. ?session=12345)");
-  document.querySelector('.container').innerHTML = '';
-  throw new Error("Session ID not provided");
-}
-
-let metadata = {};
-let baseListing = {};
-let genresArr = [];
-let featuresArr = [];
-let hardwareArr = [];
-let serverScreenshotsArr = [];
-let previewScreenshotsArr = [];
-let promoArr = [];
-let iconFile = null;
-let iconDataUrl = null;
-let mediaBase = '';
-let allMediaFiles = [];
-let currentListingKey = null;
-let screenshotsArr = []; // [{file, dataUrl}]
-let trailerArr = [];
-let trailerImageArr = [];
-
-// --- MediaType Enum ---
-const MediaType = {
-  SCREENSHOT: "Screenshot",
-  ICON: "Icon",
-  PROMO: "Promo",
-  TRAILER: "Trailer",
-  TRAILER_IMAGE: "TrailerImage",
-  OTHER: "other"
-};
-
-// --- Media type helpers ---
-const screenshotPrefixes = [
-  "Screenshot", "MobileScreenshot", "XboxScreenshot", "SurfaceHubScreenshot", "HoloLensScreenshot"
-];
-const iconPrefixes = [
-  "Icon", "SquareIcon358X358"
-];
-const promoPrefixes = [
-  "PromotionalArt16x9", "PromotionalArtwork2400X1200", "StoreLogo9x16", "StoreLogoSquare",
-  "PromotionalArtwork414X180", "XboxBrandedKeyArt", "XboxTitledHeroArt", "XboxFeaturedPromotionalArt",
-  "BackgroundImage1000X800"
-];
-const trailerPrefix = "Trailer";
-
-// --- Use enum for getMediaType ---
-function getMediaType(originalname) {
-  for (const prefix of screenshotPrefixes) if (originalname.startsWith(prefix)) return MediaType.SCREENSHOT;
-  for (const prefix of iconPrefixes) if (originalname.startsWith(prefix)) return MediaType.ICON;
-  for (const prefix of promoPrefixes) if (originalname.startsWith(prefix)) return MediaType.PROMO;
-  if (originalname.startsWith(trailerPrefix)) return MediaType.TRAILER;
-  return MediaType.OTHER;
-}
-
-function dataURLtoBlob(dataurl) {
-  const arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-  for (let i = 0; i < n; i++) u8arr[i] = bstr.charCodeAt(i);
-  return new Blob([u8arr], { type: mime });
-}
-
-async function addListing() {
-  const lang = prompt("Enter new language code (e.g. 'en', 'fr', 'de'):");
-  if (!lang) return;
-  if (!metadata.listings) metadata.listings = {};
-  if (metadata.listings[lang]) {
-    alert("Listing already exists for this language.");
-    return;
-  }
-  metadata.listings[lang] = {
-    baseListing: {
-      title: '',
-      description: '',
-      features: [],
-      releaseNotes: '',
-      minimumHardware: [],
-      genres: [],
-      screenshots: [],
-      icon: null,
-      promo: [],
-      trailer: null,
-      trailerImage: null
-    },
-    platformOverrides: {}
-  };
-  currentListingKey = lang;
-  populateListingDropdown();
-  await loadListing();
-}
-
-function populateListingDropdown() {
-  const select = document.getElementById('listingSelect');
-  if (!select) return;
-  select.innerHTML = '';
-  const keys = Object.keys(metadata.listings || {});
-  keys.forEach(key => {
-    const opt = document.createElement('option');
-    opt.value = key;
-    opt.textContent = key;
-    select.appendChild(opt);
-  });
-  if (!currentListingKey || !keys.includes(currentListingKey)) {
-    currentListingKey = keys[0];
-  }
-  select.value = currentListingKey;
-}
-
-async function removeListing() {
-  if (!currentListingKey || !metadata.listings || !metadata.listings[currentListingKey]) return;
-  if (Object.keys(metadata.listings).length === 1) {
-    alert("At least one listing is required.");
-    return;
-  }
-  if (!confirm(`Remove listing for "${currentListingKey}"?`)) return;
-  delete metadata.listings[currentListingKey];
-  const keys = Object.keys(metadata.listings);
-  currentListingKey = keys[0];
-  populateListingDropdown();
-  await loadListing();
-}
-
-// Render screenshots (no type check needed)
-
-function renderIcon(dataUrl) {
-  const iconDiv = document.getElementById('icon');
-  // Remove any previous icon image
-  const oldImg = iconDiv.querySelector('img');
-  if (oldImg) iconDiv.removeChild(oldImg);
-  if (dataUrl) {
-    const img = document.createElement('img');
-    img.src = dataUrl;
-    img.alt = "App Icon";
-    img.style.maxWidth = "120px";
-    img.style.maxHeight = "120px";
-    img.style.display = "block";
-    img.style.marginBottom = "8px";
-    iconDiv.insertBefore(img, iconDiv.firstChild);
-  }
-}
-
-function renderList(containerId, arr) {
-  const ul = document.getElementById(containerId);
-  ul.innerHTML = '';
-  arr.forEach((item, idx) => {
-    const li = document.createElement('li');
-    const input = document.createElement('input');
-    input.value = item;
-    input.oninput = function() {
-      arr[idx] = input.value;
-    };
-    li.appendChild(input);
-
-    const delBtn = document.createElement('button');
-    delBtn.className = 'remove-btn';
-    delBtn.innerHTML = '&times;';
-    delBtn.onclick = function() {
-      arr.splice(idx, 1);
-      renderList(containerId, arr);
-    };
-    li.appendChild(delBtn);
-
-    ul.appendChild(li);
-  });
-}
-async function uploadTrailerImage() {
-  const input = document.getElementById('trailerImageUpload');
-  if (!input.files.length) return;
-  const file = input.files[0];
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    trailerImageArr = [{ file, dataUrl: e.target.result }];
-    if (metadata.listings && metadata.listings[currentListingKey]) {
-      metadata.listings[currentListingKey].baseListing.trailerImage = trailerImageArr[0];
-    }
-    renderMediaGrid('trailerImageMedia', trailerImageArr, '', "Trailer Image");
-  };
-  reader.readAsDataURL(file);
-}
-
-function renderMediaGrid(containerId, arr, base, label) {
-  const container = document.getElementById(containerId);
-  container.innerHTML = '';
-  arr.forEach((item, idx) => {
-    const src = item.dataUrl;
-    const wrap = document.createElement('div');
-    wrap.className = 'media-thumb';
-    let mediaElem;
-    if (src.startsWith('data:')) {
-      mediaElem = document.createElement('img');
-      mediaElem.src = src;
-    } else if (src.endsWith('.mp4') || src.endsWith('.webm')) {
-      mediaElem = document.createElement('video');
-      mediaElem.src = base + src;
-      mediaElem.controls = true;
-    } else {
-      mediaElem = document.createElement('img');
-      mediaElem.src = base + src;
-    }
-    wrap.appendChild(mediaElem);
-    const lbl = document.createElement('span');
-    lbl.className = 'media-label';
-    lbl.innerText = label;
-    wrap.appendChild(lbl);
-
-    // Delete button
-    if (containerId === 'screenshots') {
-      const delBtn = document.createElement('button');
-      delBtn.className = 'remove-btn';
-      delBtn.innerHTML = '&times;';
-      delBtn.style.position = 'absolute';
-      delBtn.style.top = '4px';
-      delBtn.style.right = '4px';
-      delBtn.onclick = function() {
-        deleteScreenshot(idx);
-      };
-      wrap.appendChild(delBtn);
-    }
-    container.appendChild(wrap);
-  });
-}
-
-
-// --- Helper to get current baseListing ---
-function getCurrentBaseListing() {
-  if (!metadata.listings) return {};
-  if (!metadata.listings[currentListingKey]) return {};
-  return metadata.listings[currentListingKey].baseListing;
-}
-
-function belongs_to_listing(fileName, listingKey) {
-  if (!fileName || !listingKey) return false;
-  const locale = fileName.split('_')[1];
-  return locale === listingKey || locale === "all";
-}
-
-// --- Load listing and all per-listing media ---
-async function loadListing() {
-  if (!currentListingKey || !metadata.listings || !metadata.listings[currentListingKey]) {
-    baseListing = {};
-    document.getElementById('title').value = '';
-    document.getElementById('description').value = '';
-    featuresArr = [];
-    renderList('features', featuresArr);
-    document.getElementById('releaseNotes').value = '';
-    hardwareArr = [];
-    renderList('hardware', hardwareArr);
-    genresArr = [];
-    renderList('genres', genresArr);
-    screenshotsArr = [];
-    iconDataUrl = null;
-    promoArr = [];
-    trailerArr = [];
-    trailerImageArr = [];
-    renderMediaGrid('screenshots', [], '', "Screenshot");
-    renderIcon('');
-    renderMediaGrid('promoMedia', [], '', "Promo");
-    renderMediaGrid('trailerMedia', [], '', "Trailer");
-    renderMediaGrid('trailerImageMedia', [], '', "Trailer Image");
-    return;
-  }
-  const listing = metadata.listings[currentListingKey];
-  baseListing = listing.baseListing || {};
-  document.getElementById('title').value = baseListing.title || '';
-  document.getElementById('description').value = baseListing.description || '';
-  featuresArr = baseListing.features ? [...baseListing.features] : [];
-  renderList('features', featuresArr);
-  document.getElementById('releaseNotes').value = baseListing.releaseNotes || '';
-  hardwareArr = baseListing.minimumHardware ? [...baseListing.minimumHardware] : [];
-  renderList('hardware', hardwareArr);
-  genresArr = baseListing.genres ? [...baseListing.genres] : [];
-  renderList('genres', genresArr);
-
-  // --- Screenshots ---
-  if (!baseListing.screenshots || !baseListing.screenshots.length) {
-    // Find all screenshot files for this locale
-    const screenshotFiles = allMediaFiles.filter(f => getMediaType(f) === MediaType.SCREENSHOT && belongs_to_listing(f,currentListingKey));
-    screenshotsArr = [];
-    for (const file of screenshotFiles) {
-      const obj = await fetchMediaAsDataUrl(mediaBase, file);
-      if (obj) screenshotsArr.push(obj);
-    }
-    baseListing.screenshots = screenshotsArr;
-  } else {
-    screenshotsArr = [...baseListing.screenshots];
-  }
-  renderMediaGrid('screenshots', screenshotsArr, '', "Screenshot");
-
-  // --- Icon ---
-  if (!baseListing.icon) {
-    const iconFileName = allMediaFiles.find(f => getMediaType(f) === MediaType.ICON && belongs_to_listing(f,currentListingKey));
-    if (iconFileName) {
-      const obj = await fetchMediaAsDataUrl(mediaBase, iconFileName);
-      iconDataUrl = obj ? obj.dataUrl : null;
-      iconFile = null;
-      baseListing.icon = obj;
-    } else {
-      iconDataUrl = null;
-      iconFile = null;
-    }
-  } else {
-    iconDataUrl = baseListing.icon.dataUrl;
-    iconFile = baseListing.icon.file || null;
-  }
-  renderIcon(iconDataUrl);
-
-  // --- Trailer ---
-  if (!baseListing.trailer) {
-    const trailerFileName = allMediaFiles.find(f => getMediaType(f) === MediaType.TRAILER && belongs_to_listing(f,currentListingKey));
-    if (trailerFileName) {
-      const obj = await fetchMediaAsDataUrl(mediaBase, trailerFileName);
-      trailerArr = obj ? [obj] : [];
-      baseListing.trailer = obj;
-    } else {
-      trailerArr = [];
-    }
-  } else {
-    trailerArr = [baseListing.trailer];
-  }
-  renderMediaGrid('trailerMedia', trailerArr, '', "Trailer");
-
-  // --- Trailer Image ---
-  if (!baseListing.trailerImage) {
-    const trailerImageFileName = allMediaFiles.find(f => getMediaType(f) === MediaType.TRAILER_IMAGE && belongs_to_listing(f,currentListingKey));
-    if (trailerImageFileName) {
-      const obj = await fetchMediaAsDataUrl(mediaBase, trailerImageFileName);
-      trailerImageArr = obj ? [obj] : [];
-      baseListing.trailerImage = obj;
-    } else {
-      trailerImageArr = [];
-    }
-  } else {
-    trailerImageArr = [baseListing.trailerImage];
-  }
-  renderMediaGrid('trailerImageMedia', trailerImageArr, '', "Trailer Image");
-
-  // --- Promo ---
-  promoArr = [];
-  const promoFiles = allMediaFiles.filter(f => getMediaType(f) === MediaType.PROMO && belongs_to_listing(f,currentListingKey));
-  for (const file of promoFiles) {
-    const obj = await fetchMediaAsDataUrl(mediaBase, file);
-    if (obj) promoArr.push(obj);
-  }
-  baseListing.promo = promoArr;
-  renderMediaGrid('promoMedia', promoArr, '', "Promo");
-}
-
-// --- Helper: fetch media file as data URL from backend ---
-async function fetchMediaAsDataUrl(mediaBase, fileName) {
-  if (!fileName) return null;
-  try {
-    const res = await fetch(`${mediaBase.replace(/\/$/, '')}/${fileName}`);
-    const data = await res.json();
-    if (data.files && data.files.length) {
-      // Guess type from file extension
-      let type = "image/png";
-      if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) type = "image/jpeg";
-      if (fileName.endsWith(".webp")) type = "image/webp";
-      if (fileName.endsWith(".mp4")) type = "video/mp4";
-      if (fileName.endsWith(".webm")) type = "video/webm";
-      return { dataUrl: `data:${type};base64,${data.files[0].buffer}` };
-    }
-    return null;
-  } catch (e) {
-    return null;
-  }
-}
-
-// --- When loading, set per-listing media arrays and call loadListing as async ---
-async function initialLoad() {
-  const data = await fetch(`/session/${sessionId}`).then(res => res.json());
-  metadata = data.metadata;
-  populateListingDropdown();
-  await loadListing();
-  document.getElementById('pricing').value = (metadata.pricing && metadata.pricing.priceId) || 'Free';
-  mediaBase = data.mediaBase || `/media/${sessionId}/`;
-  allMediaFiles = Array.isArray(data.mediaFiles) ? data.mediaFiles : [];
-  genresArr = (metadata.gamingOptions && metadata.gamingOptions[0] && metadata.gamingOptions[0].genres) ? [...metadata.gamingOptions[0].genres] : [];
-  renderList('genres', genresArr);
-  document.getElementById('category').value = metadata.applicationCategory || '';
-  document.getElementById('visibility').value = metadata.visibility || '';
-  document.getElementById('publishMode').value = metadata.targetPublishMode || '';
-  document.getElementById('publishDate').value = metadata.targetPublishDate ? metadata.targetPublishDate.split('T')[0] : '';
-  document.getElementById('trial').value = (metadata.pricing && metadata.pricing.trialPeriod) || '';
-  document.getElementById('backup').value = metadata.automaticBackupEnabled ? 'true' : 'false';
-  document.getElementById('inapp').value = metadata.hasExternalInAppProducts ? 'true' : 'false';
-  document.getElementById('accessibility').value = metadata.meetAccessibilityGuidelines ? 'true' : 'false';
-}
-
-// --- Switch listing: save current, switch, load new ---
-async function switchListing(lang) {
-  saveCurrentListing();
-  currentListingKey = lang;
-  await loadListing();
-}
-
-function saveCurrentListing() {
-  if (!currentListingKey || !metadata.listings || !metadata.listings[currentListingKey]) return;
-  const baseListing = metadata.listings[currentListingKey].baseListing;
-  baseListing.title = document.getElementById('title').value;
-  baseListing.description = document.getElementById('description').value;
-  baseListing.features = [...featuresArr];
-  baseListing.releaseNotes = document.getElementById('releaseNotes').value;
-  baseListing.minimumHardware = [...hardwareArr];
-  baseListing.genres = [...genresArr];
-  baseListing.screenshots = [...screenshotsArr];
-  baseListing.icon = iconDataUrl ? { dataUrl: iconDataUrl, file: iconFile } : null;
-  baseListing.promo = [...promoArr];
-  baseListing.trailer = trailerArr.length ? trailerArr[0] : null;
-  baseListing.trailerImage = trailerImageArr.length ? trailerImageArr[0] : null;
-}
-
-
-// --- Delete screenshot: remove from per-listing screenshotsArr and save ---
-function deleteScreenshot(idx) {
-  screenshotsArr.splice(idx, 1);
-  saveCurrentListing();
-  renderMediaGrid('screenshots', screenshotsArr, '', "Screenshot");
-}
-
-async function uploadScreenshots() {
-  const input = document.getElementById('screenshotUpload');
-  if (!input.files.length) return;
-  const fileReaders = Array.from(input.files).map(file => {
-    return new Promise(resolve => {
-      const reader = new FileReader();
-      reader.onload = e => resolve({
-        file,
-        dataUrl: e.target.result
-      });
-      reader.readAsDataURL(file);
-    });
-  });
-  const results = await Promise.all(fileReaders);
-  screenshotsArr = screenshotsArr.concat(results);
-  if (metadata.listings && metadata.listings[currentListingKey]) {
-    metadata.listings[currentListingKey].baseListing.screenshots = screenshotsArr;
-  }
-  renderMediaGrid('screenshots', screenshotsArr, '', "Screenshot");
-}
-
-function saveNonListingMetadata() {
-  // Save non-listing metadata fields from the UI back to the metadata object
-  metadata.applicationCategory = document.getElementById('category').value;
-  metadata.visibility = document.getElementById('visibility').value;
-  metadata.targetPublishMode = document.getElementById('publishMode').value;
-  metadata.targetPublishDate = document.getElementById('publishDate').value;
-  if (!metadata.pricing) metadata.pricing = {};
-  metadata.pricing.priceId = document.getElementById('pricing').value;
-  metadata.pricing.trialPeriod = document.getElementById('trial').value;
-  metadata.automaticBackupEnabled = document.getElementById('backup').value === 'true';
-  metadata.hasExternalInAppProducts = document.getElementById('inapp').value === 'true';
-  metadata.meetAccessibilityGuidelines = document.getElementById('accessibility').value === 'true';
-  // Save genres if needed for gamingOptions
-  // if (!metadata.gamingOptions) metadata.gamingOptions = [{}];
-  // metadata.gamingOptions[0].genres = [...genresArr];
-}
-
-// --- Approve: upload only current listing's media ---
-async function approve() {
-  saveCurrentListing();
-  saveNonListingMetadata();
-  const currentLocale = currentListingKey || 'en';
-  // Remove all media references from all listings before saving
-  if (metadata.listings) {
-    for (const lang in metadata.listings) {
-      const bl = metadata.listings[lang].baseListing;
-      delete bl.images;
-      delete metadata.trailers;
-    }
-  }
-  console.log(JSON.stringify(metadata,null,2));
-  const formData = new FormData();
-  formData.append('metadata', JSON.stringify(metadata));
-  // Screenshots
-  (screenshotsArr || []).forEach(item => {
-    if (item.file) {
-      let file = item.file;
-      let baseName = file.name.replace(/^[^_]+_[a-zA-Z\-]+_/, '');
-      const newName = `Screenshot_${currentLocale}_${baseName}`;
-      formData.append('files', file, newName);
-    }
-  });
-
-  // Icon
-  if (iconFile) {
-    let baseName = iconFile.name.replace(/^[^_]+_[a-zA-Z\-]+_/, '');
-    const newName = `Icon_${currentLocale}_${baseName}`;
-    formData.append('files', iconFile, newName);
-  }
-
-  // Trailer video
-  if (trailerArr.length && trailerArr[0].file) {
-    const file = trailerArr[0].file;
-    let baseName = file.name.replace(/^[^_]+_[a-zA-Z\-]+_/, '');
-    const newName = `Trailer_${currentLocale}_${baseName}`;
-    formData.append('files', file, newName);
-  }
-
-  // Trailer image
-  if (trailerImageArr.length && trailerImageArr[0].file) {
-    const file = trailerImageArr[0].file;
-    let baseName = file.name.replace(/^[^_]+_[a-zA-Z\-]+_/, '');
-    const newName = `TrailerImage_${currentLocale}_${baseName}`;
-    formData.append('files', file, newName);
-  }
-
-  // TODO: Add promo and other media as needed
-
-  await fetch(`/${sessionId}/complete`, {
-    method: 'POST',
-    body: formData
-  }).then(res => res.json());
-  screenshotsArr = [];
-  iconDataUrl = null;
-  iconFile = null;
-  trailerArr = [];
-  trailerImageArr = [];
-  await initialLoad();
-  alert("Saved and Approved!");
-}
-
-// --- Debug: log metadata and media files ---
-function debugLog() {
-  console.log("Metadata:", metadata);
-  console.log("Media Files:", allMediaFiles);
-}
-initialLoad().then(() => {
-    alert("Metadata and media files saved successfully!");
-    debugLog();
-  }).catch(err => {
-    console.error("Error saving metadata:", err);
-    alert("Failed to save metadata. Check console for details.");
-  });;
-</script>
+<script src="./script.js"></script>
 
 
 

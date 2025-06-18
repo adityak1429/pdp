@@ -45,10 +45,8 @@ const saveFiles = (req, sessionId) => {
   console.log(`Metadata saved for session ${sessionDir}`);
   // Save files
   const mediaFiles = [];
-  console.log(`Saving files for session ${req.files}`);
   for (const file of req.files) {
     const filePath = path.join(sessionDir, file.originalname);
-    console.log(`Saving file: ${filePath}`);
     fs.writeFileSync(filePath, file.buffer);
     if (file.originalname !== 'metadata.json') {
       console.log(`File saved: ${filePath}`);
@@ -73,14 +71,14 @@ app.post('/upload', upload.any(), (req, res) => {
 
   // Respond with poll and preview URLs
   res.json({
-    pollUrl: `/poll/${sessionId}`,
+    pollUrl: `/${sessionId}/poll`,
     previewUrl: `/preview?session=${sessionId}`
   });
 });
 
 global.sessionFlags = {};
 // Add this endpoint for polling files
-app.get('/poll/:sessionId', (req, res) => {
+app.get('/:sessionId/poll', (req, res) => {
   if (!global.sessionFlags[req.params.sessionId]) {
     global.sessionFlags[req.params.sessionId] = { completed: false };
     return res.status(288).json({ status: "Session not approved-1" });
@@ -134,27 +132,29 @@ app.post('/:sessionId/complete', upload.any(), (req, res) => {
 });
 
 // Serve session media files at /media/:sessionId/:originalname
-app.get('/media/:sessionId/:originalname', (req, res) => {
-  const { sessionId, originalname } = req.params;
-  const filePath = path.join(__dirname, 'sessions', sessionId, originalname);
-  if (!fs.existsSync(filePath)) {
-    return res.status(404).send('File not found');
+app.get('/:sessionId/media/', (req, res) => {
+  const { sessionId } = req.params;
+  const sessionDir = path.join(__dirname, 'sessions', sessionId);
+  if (!fs.existsSync(sessionDir)) {
+    return res.status(404).json({ error: "Session not found." });
   }
-  // Send file as a form with 'files' field, including file name and buffer
-  res.setHeader('Content-Type', 'application/json');
-  const fileBuffer = fs.readFileSync(filePath);
-  res.json({
-    files: [
-      {
-        filename: originalname,
-        buffer: fileBuffer.toString('base64')
-      }
-    ]
+  const files = fs.readdirSync(sessionDir).filter(f => f !== 'metadata.json');
+  const result = files.map(filename => {
+    const filePath = path.join(sessionDir, filename);
+    const data = fs.readFileSync(filePath);
+    return {
+      name: filename,
+      data: data.toString('base64')
+      
+    };
   });
+  res.json(result);
+
+
 });
 
 // Add this endpoint to get session metadata and media file list
-app.get('/session/:sessionId', (req, res) => {
+app.get('/:sessionId', (req, res) => {
   const sessionId = req.params.sessionId;
   const sessionDir = path.join(__dirname, 'sessions', sessionId);
   const metadataPath = path.join(sessionDir, 'metadata.json');
@@ -165,17 +165,13 @@ app.get('/session/:sessionId', (req, res) => {
     return res.status(404).json({ error: `metadata not found at ${metadataPath}.` });
   }
   const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf-8'));
-  // List all media files except metadata.json
-  const mediaFiles = fs.readdirSync(sessionDir).filter(f => f !== 'metadata.json');
   res.json({
-    metadata,
-    mediaFiles,
-    mediaBase: `/media/${sessionId}/`
-  });
+    metadata
+   });
 });
 
 // Clear all files and metadata for a session
-app.post('/session/:sessionId/clear', (req, res) => {
+app.post('/:sessionId/clear', (req, res) => {
   const sessionId = req.params.sessionId;
   const sessionDir = path.join(__dirname, 'sessions', sessionId);
 
