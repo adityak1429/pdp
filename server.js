@@ -101,6 +101,18 @@ app.get('/:sessionId/poll', (req, res) => {
     };
   });
   res.json(result);
+  // Delete all files in the session directory
+  for (const file of fs.readdirSync(sessionDir)) {
+    fs.unlinkSync(path.join(sessionDir, file));
+  }
+  // Optionally, remove the session directory itself
+  fs.rmdirSync(sessionDir);
+
+  // Remove session flag if present
+  if (global.sessionFlags && global.sessionFlags[sessionId]) {
+    delete global.sessionFlags[sessionId];
+  }
+
 });
 
 app.post('/:sessionId/complete', upload.any(), (req, res) => {
@@ -170,28 +182,26 @@ app.get('/:sessionId', (req, res) => {
    });
 });
 
-// Clear all files and metadata for a session
-app.post('/:sessionId/clear', (req, res) => {
-  const sessionId = req.params.sessionId;
-  const sessionDir = path.join(__dirname, 'sessions', sessionId);
+import cron from 'node-cron';
 
-  if (!fs.existsSync(sessionDir)) {
-    return res.status(404).json({ error: "Session not found." });
-  }
+// Cleanup job: runs every day at 2:30 AM
+cron.schedule('30 2 * * *', () => {
+  const SESSIONS_DIR = path.join(__dirname, 'sessions');
+  const MAX_AGE_MS = 1 * 24 * 60 * 60 * 1000; // 1 days
 
-  // Delete all files in the session directory
-  for (const file of fs.readdirSync(sessionDir)) {
-    fs.unlinkSync(path.join(sessionDir, file));
-  }
-  // Optionally, remove the session directory itself
-  fs.rmdirSync(sessionDir);
-
-  // Remove session flag if present
-  if (global.sessionFlags && global.sessionFlags[sessionId]) {
-    delete global.sessionFlags[sessionId];
-  }
-
-  res.json({ status: "Session cleared", sessionId });
+  if (!fs.existsSync(SESSIONS_DIR)) return;
+  fs.readdirSync(SESSIONS_DIR).forEach(folder => {
+    const folderPath = path.join(SESSIONS_DIR, folder);
+    try {
+      const stats = fs.statSync(folderPath);
+      if (Date.now() - stats.mtimeMs > MAX_AGE_MS) {
+        fs.rmSync(folderPath, { recursive: true, force: true });
+        console.log(`[CLEANUP] Deleted old session: ${folderPath}`);
+      }
+    } catch (e) {
+      console.error(`[CLEANUP] Error checking/deleting ${folderPath}:`, e.message);
+    }
+  });
 });
 
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));

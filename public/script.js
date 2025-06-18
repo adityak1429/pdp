@@ -376,11 +376,11 @@ async function approve() {
   formData.append('metadata', JSON.stringify(metadata));
 
     // debugging
-  console.log(JSON.stringify(metadata, null, 2));
-    for (let pair of formData.getAll('files')) {
-        console.log(pair instanceof File ? pair.name : pair);
-    }
-    return;
+//   console.log(JSON.stringify(metadata, null, 2));
+//     for (let pair of formData.getAll('files')) {
+//         console.log(pair instanceof File ? pair.name : pair);
+//     }
+//     return;
 
   await fetch(`/${sessionId}/complete`, {
     method: 'POST',
