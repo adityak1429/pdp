@@ -240,8 +240,7 @@ const input = document.getElementById('screenshotUpload');
 async function uploadTrailerImage() {
   const input = document.getElementById('trailerImageUpload');
   if (!input.files.length) return;
-  const videoBaseName = document.getElementById('videoBaseName').value || Date.now();
-  addMediaFile(input.files[0], MediaType.TRAILER_IMAGE, currentListingKey,filename = `TrailerImage_${currentListingKey}_${videoBaseName}.${input.files[0].name.split('.').pop()}`);
+  addMediaFile(input.files[0], MediaType.TRAILER_IMAGE, currentListingKey,filename = `TrailerImage_${currentListingKey}_asset.${input.files[0].name.split('.').pop()}`);
     input.value = ""; // Clear the input after use
   renderMedia();      
 }
@@ -249,9 +248,7 @@ async function uploadTrailerImage() {
 async function uploadTrailer() {
   const input = document.getElementById('trailerUpload');
   if (!input.files.length) return;
-  const videoBaseName = Date.now();
-  addMediaFile(input.files[0], MediaType.TRAILER, currentListingKey, filename = `Trailer_${currentListingKey}_${videoBaseName}.${input.files[0].name.split('.').pop()}`);
-  document.getElementById('videoBaseName').value = videoBaseName; // Save base name for future uploads
+  addMediaFile(input.files[0], MediaType.TRAILER, currentListingKey, filename = `Trailer_${currentListingKey}_asset.${input.files[0].name.split('.').pop()}`);
   input.value = ""; // Clear the input after use
   renderMedia();      
 }
@@ -290,8 +287,6 @@ function renderMedia() {
   const trailers = Object.values(localMedia).filter(
     m => m.type === MediaType.TRAILER 
   );
-  videoBaseName = trailers.length ? trailers[0].filename.split('_')[2] : '';
-  document.getElementById('videoBaseName').value = videoBaseName; // Set base name for future uploads
   renderMediaGrid('trailerMedia', trailers, "Trailer");
 
   // Icon (if you want to support it)
