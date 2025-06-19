@@ -5,6 +5,13 @@ if (!sessionId) {
   throw new Error("Session ID not provided");
 }
 
+// globalMedia[filename] = {
+//     filename,
+//     dataUrl,
+//     type:getMediaType(filename),
+//     locales : [...ALL_LOCALES],
+//     };
+
 let metadata = {};
 let baseListing = {};
 let featuresArr = [];
@@ -60,15 +67,18 @@ function addMediaFile(file, type, locale) {
   reader.readAsDataURL(file);
 }
 // list of all locales in ms store
-const ALL_LOCALES = [ 'en', 'fr', 'de', 'es', 'it', 'ja', 'ko', 'pt-BR', 'ru', 'zh-CN', 'zh-TW', 'ar', 'hi', 'tr', 'nl', 'pl', 'sv', 'da', 'fi', 'no' ];
+const ALL_LOCALES = ["en", "en-US", "en-GB", "fr", "fr-FR", "fr-CA", "de", "de-DE", "de-AT", "de-CH", "es", "es-ES", "es-MX", "es-AR", "it", "it-IT", "pt", "pt-BR", "pt-PT", "zh", "zh-CN", "zh-TW", "zh-HK", "ja", "ja-JP", "ko", "ko-KR", "ru", "ru-RU", "ar", "ar-SA", "ar-EG", "hi", "hi-IN", "nl", "nl-NL", "nl-BE", "tr", "tr-TR", "sv", "sv-SE", "no", "no-NO", "da", "da-DK", "fi", "fi-FI", "pl", "pl-PL", "cs", "cs-CZ", "el", "el-GR", "he", "he-IL", "th", "th-TH", "vi", "vi-VN", "id", "id-ID", "ms", "ms-MY", "ro", "ro-RO", "hu", "hu-HU", "uk", "uk-UA"]
 
 function addToGlobalMedia(filename, dataUrl, locale) {
-    if(locale==="all"){
+    if(locale.startsWith("all")){
+        const exclude_list = locale.slice(4).split(',');
+        // Remove excluded locales from ALL_LOCALES
+        const filteredLocales = ALL_LOCALES.filter(loc => !exclude_list.includes(loc));
         globalMedia[filename] = {
             filename,
             dataUrl,
             type:getMediaType(filename),
-            locales : [...ALL_LOCALES],
+            locales : [...filteredLocales],
             };
         }
     else{
@@ -76,7 +86,7 @@ function addToGlobalMedia(filename, dataUrl, locale) {
             filename,
             dataUrl,
             type:getMediaType(filename),
-            locales : [locale],
+            locales : [...locale.split(',').map(loc => loc.trim())],
             };
     }
 }
@@ -92,6 +102,7 @@ function removeFromGlobalMedia(filename) {
         if (globalMedia[filename].locales.length === 0) {
             delete globalMedia[filename];
         }
+
     } else {
         console.warn(`Media file not found: ${filename}`);
     }
@@ -361,9 +372,25 @@ function changeIcon(input) {
   reader.readAsDataURL(file);
 }
 
-function addPrivacypolicy() {
-  for (const listingKey in metadata.listings) {
-      metadata.listings[listingKey].baseListing.privacyPolicy = "https://www.apple.com/legal/privacy/en-ww/";
+// make file names consistent across locales
+function make_globalMedia_consistent() {
+  for (const [filename, media] of Object.entries(globalMedia)) {
+    const parts = filename.split('_');
+    // filename format: type_locale_timestamp.ext
+    if (parts.length < 3) continue;
+    const locale = parts[1];
+    if (locale.startsWith("all")) {
+      // If locale is "all", we need to ensure all locales are included
+      const exclude_list = locale.slice(4).split(',');
+      const filteredLocales = ALL_LOCALES.filter(loc => !exclude_list.includes(loc));
+      const removed_locales = filteredLocales-globalMedia[filename].locales;
+      if (removed_locales.length > 0) {
+        globalMedia[filename].filename = `${parts[0]}_all/${removed_locales.join(',')}_${parts.slice(2).join('_')}`;
+      }
+    } else {
+      // For regular locales, just ensure the filename is consistent
+      globalMedia[filename].filename = `${parts[0]}_${globalMedia[filename].locales.join(',')}_${parts.slice(2).join('_')}`;
+    }
   }
 }
 
@@ -373,10 +400,10 @@ async function approve() {
   saveNonListingMetadata();
   const formData = new FormData();
 
-  addPrivacypolicy();
+  make_globalMedia_consistent();
 
-  Object.entries(globalMedia).forEach(([filename, media]) => {
-      formData.append('files', dataURLToBlob(media.dataUrl), filename);
+  Object.entries(globalMedia).forEach(([_, media]) => {
+      formData.append('files', dataURLToBlob(media.dataUrl), media.filename);
   });
 
   formData.append('metadata', JSON.stringify(metadata));
