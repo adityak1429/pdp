@@ -57,9 +57,7 @@ function getMediaType(originalname) {
 const globalMedia = {}; // { filename: { file, dataUrl, type, locale } }
 
 // --- Helper: Add file to globalMedia with prefix ---
-function addMediaFile(file, type, locale) {
-  const ext = file.name.split('.').pop();
-  const filename = `${type}_${locale}_${Date.now()}.${ext}`;
+function addMediaFile(file, type, locale,filename = `${type}_${locale}_${Date.now()}.${file.name.split('.').pop()}` ) {
   const reader = new FileReader();
   reader.onload = function(e) {
     addToGlobalMedia(filename, e.target.result, locale);
@@ -222,9 +220,9 @@ async function switchListing(lang) {
   await loadListing();
 }
 
-function deleteScreenshot(filename) {
+function deleteImage(filename) {
   removeFromGlobalMedia(filename);
-  console.log(`Deleted screenshot: ${filename}`);
+  console.log(`Deleted: ${filename}`);
   renderMedia();
 }
 
@@ -242,7 +240,8 @@ const input = document.getElementById('screenshotUpload');
 async function uploadTrailerImage() {
   const input = document.getElementById('trailerImageUpload');
   if (!input.files.length) return;
-  addMediaFile(input.files[0], MediaType.TRAILER_IMAGE, currentListingKey);
+  const videoBaseName = document.getElementById('videoBaseName').value || Date.now();
+  addMediaFile(input.files[0], MediaType.TRAILER_IMAGE, currentListingKey,filename = `TrailerImage_${currentListingKey}_${videoBaseName}.${input.files[0].name.split('.').pop()}`);
     input.value = ""; // Clear the input after use
   renderMedia();      
 }
@@ -250,8 +249,10 @@ async function uploadTrailerImage() {
 async function uploadTrailer() {
   const input = document.getElementById('trailerUpload');
   if (!input.files.length) return;
-  addMediaFile(input.files[0], MediaType.TRAILER, currentListingKey);
-    input.value = ""; // Clear the input after use
+  const videoBaseName = Date.now();
+  addMediaFile(input.files[0], MediaType.TRAILER, currentListingKey, filename = `Trailer_${currentListingKey}_${videoBaseName}.${input.files[0].name.split('.').pop()}`);
+  document.getElementById('videoBaseName').value = videoBaseName; // Save base name for future uploads
+  input.value = ""; // Clear the input after use
   renderMedia();      
 }
 
@@ -289,6 +290,8 @@ function renderMedia() {
   const trailers = Object.values(localMedia).filter(
     m => m.type === MediaType.TRAILER 
   );
+  videoBaseName = trailers.length ? trailers[0].filename.split('_')[2] : '';
+  document.getElementById('videoBaseName').value = videoBaseName; // Set base name for future uploads
   renderMediaGrid('trailerMedia', trailers, "Trailer");
 
   // Icon (if you want to support it)
@@ -527,8 +530,9 @@ function renderMediaGrid(containerId, arr, label) {
     lbl.innerText = label;
     wrap.appendChild(lbl);
 
+
     // Delete button
-    if (containerId === 'screenshots') {
+    // if (containerId === 'screenshots') {
       const delBtn = document.createElement('button');
       delBtn.className = 'remove-btn';
       delBtn.innerHTML = '&times;';
@@ -536,10 +540,10 @@ function renderMediaGrid(containerId, arr, label) {
       delBtn.style.top = '4px';
       delBtn.style.right = '4px';
       delBtn.onclick = function() {
-        deleteScreenshot(item.filename);
+        deleteImage(item.filename);
       };
       wrap.appendChild(delBtn);
-    }
+    // }
     container.appendChild(wrap);
   });
 }
