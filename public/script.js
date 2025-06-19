@@ -67,7 +67,15 @@ function addMediaFile(file, type, locale) {
   reader.readAsDataURL(file);
 }
 // list of all locales in ms store
-const ALL_LOCALES = ["en", "en-US", "en-GB", "fr", "fr-FR", "fr-CA", "de", "de-DE", "de-AT", "de-CH", "es", "es-ES", "es-MX", "es-AR", "it", "it-IT", "pt", "pt-BR", "pt-PT", "zh", "zh-CN", "zh-TW", "zh-HK", "ja", "ja-JP", "ko", "ko-KR", "ru", "ru-RU", "ar", "ar-SA", "ar-EG", "hi", "hi-IN", "nl", "nl-NL", "nl-BE", "tr", "tr-TR", "sv", "sv-SE", "no", "no-NO", "da", "da-DK", "fi", "fi-FI", "pl", "pl-PL", "cs", "cs-CZ", "el", "el-GR", "he", "he-IL", "th", "th-TH", "vi", "vi-VN", "id", "id-ID", "ms", "ms-MY", "ro", "ro-RO", "hu", "hu-HU", "uk", "uk-UA"]
+const ALL_LOCALES = [
+  "en", "en-us", "en-gb", "fr", "fr-fr", "fr-ca", "de", "de-de", "de-at", "de-ch",
+  "es", "es-es", "es-mx", "es-ar", "it", "it-it", "pt", "pt-br", "pt-pt", "zh",
+  "zh-cn", "zh-tw", "zh-hk", "ja", "ja-jp", "ko", "ko-kr", "ru", "ru-ru", "ar",
+  "ar-sa", "ar-eg", "hi", "hi-in", "nl", "nl-nl", "nl-be", "tr", "tr-tr", "sv",
+  "sv-se", "no", "no-no", "da", "da-dk", "fi", "fi-fi", "pl", "pl-pl", "cs",
+  "cs-cz", "el", "el-gr", "he", "he-il", "th", "th-th", "vi", "vi-vn", "id",
+  "id-id", "ms", "ms-my", "ro", "ro-ro", "hu", "hu-hu", "uk", "uk-ua"
+];
 
 function addToGlobalMedia(filename, dataUrl, locale) {
     if(locale.startsWith("all")){
@@ -98,10 +106,13 @@ function removeFromGlobalMedia(filename) {
         if (idx !== -1) {
             globalMedia[filename].locales.splice(idx, 1);
         }
+        console.log(`Removed locale "${currentListingKey}" from media file: ${filename}, locales now: ${globalMedia[filename].locales.join(', ')}`);
         // If no locales left, delete the entry
         if (globalMedia[filename].locales.length === 0) {
             delete globalMedia[filename];
+            console.log(`Media file ${filename} removed from globalMedia.`);
         }
+        console.log("done");
 
     } else {
         console.warn(`Media file not found: ${filename}`);
@@ -379,17 +390,35 @@ function make_globalMedia_consistent() {
     // filename format: type_locale_timestamp.ext
     if (parts.length < 3) continue;
     const locale = parts[1];
+    console.log(`Processing file: ${filename} with locale: ${locale}`);
     if (locale.startsWith("all")) {
       // If locale is "all", we need to ensure all locales are included
-      const exclude_list = locale.slice(4).split(',');
+      const exclude_list = locale.slice(4).split(',').filter(Boolean);
       const filteredLocales = ALL_LOCALES.filter(loc => !exclude_list.includes(loc));
-      const removed_locales = filteredLocales-globalMedia[filename].locales;
-      if (removed_locales.length > 0) {
-        globalMedia[filename].filename = `${parts[0]}_all/${removed_locales.join(',')}_${parts.slice(2).join('_')}`;
+      // Find locales present in filteredLocales but not in media.locales
+      const removed_locales = filteredLocales.filter(loc => !media.locales.includes(loc));
+      console.log(`Removed locales: ${removed_locales}`);
+
+      if (removed_locales.length === 0) {
+        // If no locales were removed, keep the original filename
+        globalMedia[filename].filename = filename;
+      } else {
+        let new_locale;
+        if (exclude_list.length > 0) {
+          // already format excludes some locales, append removed_locales
+          new_locale = `${locale}#${removed_locales.join(',')}`;
+        } else {
+          // format the filename to include removed locales
+          // e.g. Screenshot_all#en,fr,de_12345.png
+          new_locale = `${locale}#${removed_locales.join(',')}`;
+        }
+        globalMedia[filename].filename = `${parts[0]}_${new_locale}_${parts.slice(2).join('_')}`;
+        console.log(`Updated filename: ${globalMedia[filename].filename}`);
       }
     } else {
+      console.log(`Current locales: ${media.locales.join(',')}`);
       // For regular locales, just ensure the filename is consistent
-      globalMedia[filename].filename = `${parts[0]}_${globalMedia[filename].locales.join(',')}_${parts.slice(2).join('_')}`;
+      globalMedia[filename].filename = `${parts[0]}_${media.locales.join(',')}_${parts.slice(2).join('_')}`;
     }
   }
 }
@@ -403,6 +432,7 @@ async function approve() {
   make_globalMedia_consistent();
 
   Object.entries(globalMedia).forEach(([_, media]) => {
+      console.log(`Adding media: ${media.filename}}`);
       formData.append('files', dataURLToBlob(media.dataUrl), media.filename);
   });
 

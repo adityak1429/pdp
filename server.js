@@ -126,9 +126,9 @@ app.post('/:sessionId/complete', upload.any(), (req, res) => {
   }
 
   // // Delete all existing files in the session directory
-  // for (const file of fs.readdirSync(sessionDir)) {
-  //   fs.unlinkSync(path.join(sessionDir, file));
-  // }
+  for (const file of fs.readdirSync(sessionDir)) {
+    fs.unlinkSync(path.join(sessionDir, file));
+  }
 
   // Save new files
   try {
