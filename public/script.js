@@ -240,7 +240,7 @@ const input = document.getElementById('screenshotUpload');
 async function uploadTrailerImage() {
   const input = document.getElementById('trailerImageUpload');
   if (!input.files.length) return;
-  addMediaFile(input.files[0], MediaType.TRAILER_IMAGE, currentListingKey,filename = `TrailerImage_${currentListingKey}_asset.${input.files[0].name.split('.').pop()}`);
+  addMediaFile(input.files[0], MediaType.TRAILER_IMAGE, currentListingKey,filename = `TrailerImage_${currentListingKey}_${currentListingKey}-asset.${input.files[0].name.split('.').pop()}`);
     input.value = ""; // Clear the input after use
   renderMedia();      
 }
@@ -248,7 +248,7 @@ async function uploadTrailerImage() {
 async function uploadTrailer() {
   const input = document.getElementById('trailerUpload');
   if (!input.files.length) return;
-  addMediaFile(input.files[0], MediaType.TRAILER, currentListingKey, filename = `Trailer_${currentListingKey}_asset.${input.files[0].name.split('.').pop()}`);
+  addMediaFile(input.files[0], MediaType.TRAILER, currentListingKey, filename = `Trailer_${currentListingKey}_${currentListingKey}-asset.${input.files[0].name.split('.').pop()}`);
   input.value = ""; // Clear the input after use
   renderMedia();      
 }
