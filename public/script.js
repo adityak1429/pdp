@@ -315,7 +315,13 @@ function saveCurrentListing() {
 
 // --- When loading, set per-listing media arrays and call loadListing as async ---
 async function initialLoad() {
-  const data = await fetch(`/${sessionId}`).then(res => res.json());
+  const res = await fetch(`/${sessionId}`);
+  if (res.status === 404) {
+    alert("Session not found. Please check the session ID in the URL.");
+    document.querySelector('.container').innerHTML = '';
+    return;
+  }
+  const data = await res.json();
   metadata = data.metadata;
   currentListingKey = Object.keys(metadata.listings || {})[0] ;
   if (!currentListingKey) {
