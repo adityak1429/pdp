@@ -1,4 +1,5 @@
-const sessionId = new URLSearchParams(window.location.search).get('session');
+const sessionId = window.location.pathname.split('/')[2]; // e.g., /preview/SESSION_ID or /preview/SESSION_ID/submission_id
+console.log("Session ID from URL:", sessionId);
 if (!sessionId) {
   alert("Session ID is required in the URL (e.g. ?session=12345)");
   document.querySelector('.container').innerHTML = '';

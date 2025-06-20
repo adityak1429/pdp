@@ -20,8 +20,12 @@ app.use(express.json());
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-app.get('/preview', (req, res) => {
+app.get('/preview/:sessionId/render', (req, res) => {
   res.sendFile(path.resolve('public/editor.html'));
+});
+
+app.get('/preview/:sessionId/submission', (req, res) => {
+  res.sendFile(path.resolve('public/approval.html'));
 });
 
 // Function to save files and metadata
@@ -72,7 +76,7 @@ app.post('/upload', upload.any(), (req, res) => {
   // Respond with poll and preview URLs
   res.json({
     pollUrl: `/${sessionId}/poll`,
-    previewUrl: `/preview?session=${sessionId}`
+    previewUrl: `/preview/${sessionId}`
   });
 });
 

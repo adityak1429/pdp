@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Submission Verification</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    .button-group { margin-top: 30px; }
+    button {
+      margin: 10px 20px 10px 0;
+      padding: 12px 24px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      background-color: #0078d4;
+      color: white;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    button:hover { background-color: #005fa3; }
+  </style>
+</head>
+<body>
+  <h1>Complete Your Product Submission</h1>
+  <p>
+    Please use the buttons below to complete the verification and update privacy policy for your product submission , then check pdp and approve.
+  </p>
+  <div class="button-group">
+    <button id="ageratings-btn">Go to Age Ratings Verification</button>
+    <button id="properties-btn">Go to Submission Properties</button>
+    <button id="dashboard-btn">Go to PDP page</button>
+  </div>
+  <script>
+    const submission_id = new URLSearchParams(window.location.search).get('submission_id');
+    const product_id = new URLSearchParams(window.location.search).get('product_id');
+    if (!submission_id || !product_id) {
+      document.body.innerHTML = '<h2>Error: Missing submission_id or product_id in URL.</h2>';
+      throw new Error('Missing submission_id or product_id in URL');
+    }
+
+    document.getElementById('ageratings-btn').onclick = function() {
+        window.open(`https://partner.microsoft.com/en-us/dashboard/products/${product_id}/submissions/${submission_id}/ageratings`, '_blank');
+    };
+    document.getElementById('properties-btn').onclick = function() {
+        window.open(`https://partner.microsoft.com/en-us/dashboard/products/${product_id}/submissions/${submission_id}/properties`, '_blank');
+    };
+    document.getElementById('dashboard-btn').onclick = function() {
+        const parts = window.location.href.split('/');
+        parts.pop(); 
+        const final_dest = parts.join('/');
+        window.open(final_dest+'/render', '_blank');
+    };
+  </script>
+</body>
+</html>
