@@ -207,9 +207,9 @@
   <div class="hero">
     <div class="hero-media" id="icon">
       <!-- Icon image will be rendered here by JS -->
-      <input type="file" id="iconUpload" accept="image/*" style="margin-top:8px;display:block;" onchange="changeIcon(this)">
-      <button class="add-btn" type="button" onclick="document.getElementById('iconUpload').click()">Change Icon</button>
     </div>
+    <input type="file" id="iconUpload" accept="image/*" style="margin-top:8px;display: none;" onchange="changeIcon(this)">
+    <button class="add-btn" type="button" onclick="document.getElementById('iconUpload').click()">Change Icon</button>
     <div class="hero-details">
       <div style="margin-bottom: 16px;">
         <label for="listingSelect" style="font-weight:600;">Language Listing:</label>
@@ -228,8 +228,9 @@
   <div class="section">
     <div class="section-title">Screenshots</div>
     <div id="screenshots" class="media-grid"></div>
-    <input type="file" id="screenshotUpload" multiple accept="image/*" style="margin-bottom:16px;">
-    <button class="add-btn" onclick="uploadScreenshots()">Upload Screenshots</button>
+    <input onchange="uploadScreenshots(this)" type="file" id="screenshotUpload" multiple accept="image/*" style="display: none; ">
+    <button class="add-btn" onclick="document.getElementById('screenshotUpload').click()">Upload Screenshots</button>
+
   </div>
 
 
@@ -396,13 +397,14 @@
   <div class="section">
     <div class="section-title">Trailer Video</div>
     <div id="trailerMedia" class="media-grid"></div>
-    <input type="file" id="trailerUpload" accept="video/mp4,video/webm" style="margin-bottom:16px;">
-    <button class="add-btn" onclick="uploadTrailer()">Upload Trailer</button>
+    <input onchange = "uploadTrailer(this)" type="file" id="trailerUpload" accept="video/mp4,video/webm" style="display: none;">
+    <button class="add-btn" onclick="document.getElementById(`trailerUpload`).click()">Upload Trailer</button>
+
   </div>
   
   <div class="section">
-    <input type="file" id="trailerImageUpload" accept="image/*" style="margin-bottom:16px;">
-    <button class="add-btn" onclick="uploadTrailerImage()">Upload Trailer Image</button>
+    <input onchange = "uploadTrailerImage(this)" type="file" id="trailerImageUpload" accept="image/*" style="display: none;">
+    <button class="add-btn" onclick="document.getElementById(`trailerImageUpload`).click()">Upload Trailer Image</button>
     <div class="section-title">Trailer Image</div>
     <div id="trailerImageMedia" class="media-grid"></div>
   </div>

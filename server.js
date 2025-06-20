@@ -187,7 +187,7 @@ app.get('/', (req, res) => {
     <h1>Media Upload Server</h1>
     <p>Use the following endpoints:</p>
     <ul>
-      <li><strong>v:</strong> 4</li>
+      <li><strong>v:</strong> 6</li>
       <li><strong>Upload:</strong> POST /upload</li>
       <li><strong>Poll:</strong> GET /:sessionId/poll</li>
       <li><strong>Complete:</strong> POST /:sessionId/complete</li>

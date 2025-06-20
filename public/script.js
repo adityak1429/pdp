@@ -57,12 +57,16 @@ function getMediaType(originalname) {
 const globalMedia = {}; // { filename: { file, dataUrl, type, locale } }
 
 // --- Helper: Add file to globalMedia with prefix ---
-function addMediaFile(file, type, locale,filename = `${type}_${locale}_${Date.now()}.${file.name.split('.').pop()}` ) {
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    addToGlobalMedia(filename, e.target.result, locale);
-  };
-  reader.readAsDataURL(file);
+async function addMediaFile(file, type, locale, filename = `${type}_${locale}_${Date.now()}.${file.name.split('.').pop()}`) {
+  await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      addToGlobalMedia(filename, e.target.result, locale);
+      resolve();
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 }
 // list of all locales in ms store
 const ALL_LOCALES = [
@@ -104,13 +108,13 @@ function removeFromGlobalMedia(filename) {
         if (idx !== -1) {
             globalMedia[filename].locales.splice(idx, 1);
         }
-        console.log(`Removed locale "${currentListingKey}" from media file: ${filename}, locales now: ${globalMedia[filename].locales.join(', ')}`);
+        // console.log(`Removed locale "${currentListingKey}" from media file: ${filename}, locales now: ${globalMedia[filename].locales.join(', ')}`);
         // If no locales left, delete the entry
         if (globalMedia[filename].locales.length === 0) {
             delete globalMedia[filename];
-            console.log(`Media file ${filename} removed from globalMedia.`);
+            // console.log(`Media file ${filename} removed from globalMedia.`);
         }
-        console.log("done");
+        // console.log("done");
 
     } else {
         console.warn(`Media file not found: ${filename}`);
@@ -156,7 +160,7 @@ function dataURLToBlob(dataUrl) {
   return new Blob([u8arr], { type: mime });
 }
 
-async function addListing() {
+function addListing() {
   const lang = prompt("Enter new language code (e.g. 'en', 'fr', 'de'):");
   if (!lang) return;
   if (!metadata.listings) metadata.listings = {};
@@ -178,7 +182,7 @@ async function addListing() {
   saveCurrentListing();
   currentListingKey = lang;
   populateListingDropdown();
-  await loadListing();
+  loadListing();
 }
 
 function populateListingDropdown() {
@@ -198,7 +202,7 @@ function populateListingDropdown() {
   select.value = currentListingKey;
 }
 
-async function removeListing() {
+function removeListing() {
   if (!currentListingKey || !metadata.listings || !metadata.listings[currentListingKey]) return;
   if (Object.keys(metadata.listings).length === 1) {
     alert("At least one listing is required.");
@@ -209,46 +213,44 @@ async function removeListing() {
   const keys = Object.keys(metadata.listings);
   currentListingKey = keys[0];
   populateListingDropdown();
-  await loadListing();
+  loadListing();
 }
 
 
 // --- Switch listing: save current, switch, load new ---
-async function switchListing(lang) {
+function switchListing(lang) {
   saveCurrentListing();
   currentListingKey = lang;
-  await loadListing();
+  loadListing();
 }
 
 function deleteImage(filename) {
   removeFromGlobalMedia(filename);
-  console.log(`Deleted: ${filename}`);
+  // console.log(`Deleted: ${filename}`);
   renderMedia();
 }
 
 
-async function uploadScreenshots() {
-const input = document.getElementById('screenshotUpload');
+async function uploadScreenshots(input) {
   if (!input.files.length) return;
-  Array.from(input.files).forEach(file => {
-    addMediaFile(file, MediaType.SCREENSHOT, currentListingKey);
-  });
+    for(file of input.files) {
+    await addMediaFile(file, MediaType.SCREENSHOT, currentListingKey);
+    }
+    input.value = ""; // Clear the input after use
+    console.log("Screenshots uploaded:", input.files);
+  renderMedia();      
+}
+
+async function uploadTrailerImage(input) {
+  if (!input.files.length) return;
+  await addMediaFile(input.files[0], MediaType.TRAILER_IMAGE, currentListingKey,filename = `TrailerImage_${currentListingKey}_${currentListingKey}-asset.${input.files[0].name.split('.').pop()}`);
     input.value = ""; // Clear the input after use
   renderMedia();      
 }
 
-async function uploadTrailerImage() {
-  const input = document.getElementById('trailerImageUpload');
+async function uploadTrailer(input) {
   if (!input.files.length) return;
-  addMediaFile(input.files[0], MediaType.TRAILER_IMAGE, currentListingKey,filename = `TrailerImage_${currentListingKey}_${currentListingKey}-asset.${input.files[0].name.split('.').pop()}`);
-    input.value = ""; // Clear the input after use
-  renderMedia();      
-}
-
-async function uploadTrailer() {
-  const input = document.getElementById('trailerUpload');
-  if (!input.files.length) return;
-  addMediaFile(input.files[0], MediaType.TRAILER, currentListingKey, filename = `Trailer_${currentListingKey}_${currentListingKey}-asset.${input.files[0].name.split('.').pop()}`);
+  await addMediaFile(input.files[0], MediaType.TRAILER, currentListingKey, filename = `Trailer_${currentListingKey}_${currentListingKey}-asset.${input.files[0].name.split('.').pop()}`);
   input.value = ""; // Clear the input after use
   renderMedia();      
 }
@@ -268,6 +270,7 @@ function addListItem(listId) {
 
 // --- Render all media for current locale ---
 function renderMedia() {
+  console.log(`Rendering media for current locale: ${currentListingKey}`);
   // Screenshots
   const localMedia = Object.values(globalMedia).filter(
     m => m.locales && m.locales.includes(currentListingKey)
@@ -293,12 +296,13 @@ function renderMedia() {
   const icons = Object.values(localMedia).filter(
     m => m.type === MediaType.ICON
   );
-  renderIcon(icons.length ? icons[0].dataUrl : null);
-  
+  console.log("Icons found for current locale:", icons);
+  renderIcon(icons[0]);
+  console.log("Media rendered for current locale:", currentListingKey);
 }
 
 // --- Call renderMedia in loadListing and after uploads ---
-async function loadListing() {
+function loadListing() {
   if (!currentListingKey || !metadata.listings || !metadata.listings[currentListingKey]) {
     baseListing = {};
     document.getElementById('title').value = '';
@@ -333,7 +337,7 @@ function saveCurrentListing() {
   baseListing.minimumHardware = [...hardwareArr];
 }
 
-// --- When loading, set per-listing media arrays and call loadListing as async ---
+// --- When loading, set per-listing media arrays and call loadListing  ---
 async function initialLoad() {
   const res = await fetch(`/${sessionId}`);
   if (res.status === 404) {
@@ -349,9 +353,9 @@ async function initialLoad() {
     currentListingKey = Object.keys(metadata.listings || {})[0] ;
   }
   populateListingDropdown();
-  await loadListing();
+  loadListing();
   document.getElementById('pricing').value = (metadata.pricing && metadata.pricing.priceId) || 'Free';
-  fetchMedia(sessionId);
+  await fetchMedia(sessionId);
   document.getElementById('category').value = metadata.applicationCategory || '';
   document.getElementById('visibility').value = metadata.visibility || '';
   document.getElementById('publishMode').value = metadata.targetPublishMode || '';
@@ -364,21 +368,22 @@ async function initialLoad() {
 
 
 //143 write generic media file deleter
-function changeIcon(input) {
+async function changeIcon(input) {
   if (!input.files || !input.files[0]) return;
   const file = input.files[0];
   if (!file.type.startsWith('image/')) {
     alert("Please upload a valid image file for the icon.");
     return;
   }
-  iconFile = file;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    iconDataUrl = e.target.result;
-    renderIcon(iconDataUrl);
-    addMediaFile(file, MediaType.ICON, currentListingKey);
-  };
-  reader.readAsDataURL(file);
+  // Remove existing icon if any
+  const existingIcon = Object.values(globalMedia).find(
+    m => m.type === MediaType.ICON && m.locales.includes(currentListingKey)
+  );
+  if (existingIcon) {
+    deleteImage(existingIcon.filename);
+  }
+  await addMediaFile(file, MediaType.ICON, currentListingKey);
+  renderMedia();
 }
 
 // make file names consistent across locales
@@ -430,7 +435,7 @@ async function approve() {
   make_globalMedia_consistent();
 
   Object.entries(globalMedia).forEach(([_, media]) => {
-      console.log(`Adding media: ${media.filename}}`);
+      console.log(`Adding media: ${media.filename}`);
       formData.append('files', dataURLToBlob(media.dataUrl), media.filename);
   });
 
@@ -451,18 +456,24 @@ async function approve() {
   alert("Saved and Approved!");
 }
 
-initialLoad();
+  initialLoad();
 
 
 
   
 // Render screenshots (no type check needed)
 
-function renderIcon(dataUrl) {
+function renderIcon(file) {
+  console.log("Rendering icon for current locale:", currentListingKey, file);
   const iconDiv = document.getElementById('icon');
-  // Remove any previous icon image
-  const oldImg = iconDiv.querySelector('img');
-  if (oldImg) iconDiv.removeChild(oldImg);
+  // Remove any previous icon image and delete button
+  while (iconDiv.firstChild) {
+    iconDiv.removeChild(iconDiv.firstChild);
+  }
+  if (!file) {
+    return;
+  }
+  const dataUrl = file.dataUrl;
   if (dataUrl) {
     const img = document.createElement('img');
     img.src = dataUrl;
@@ -471,7 +482,26 @@ function renderIcon(dataUrl) {
     img.style.maxHeight = "120px";
     img.style.display = "block";
     img.style.marginBottom = "8px";
+    const delBtn = document.createElement('button');
+    delBtn.className = 'remove-btn';
+    delBtn.innerHTML = '&times;';
+    delBtn.style.position = 'absolute';
+    delBtn.style.top = '4px';
+    delBtn.style.right = '4px';
+    delBtn.onclick = function() {
+      // Remove icon from globalMedia for current locale
+      const iconEntry = Object.values(globalMedia).find(
+        m => m.type === MediaType.ICON && m.locales.includes(currentListingKey)
+      );
+      if (iconEntry) {
+        deleteImage(iconEntry.filename);
+        renderIcon(null);
+      }
+    };
+    iconDiv.style.position = 'relative';
+    iconDiv.appendChild(delBtn);
     iconDiv.insertBefore(img, iconDiv.firstChild);
+    console.log("Icon rendered:");
   }
 }
 
