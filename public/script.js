@@ -431,23 +431,22 @@ function make_globalMedia_consistent() {
 async function approve() {
   saveCurrentListing();
   saveNonListingMetadata();
-  const formData = new FormData();
 
+  // Validate metadata before proceeding
+  const errors = validateMetadata(metadata);
+  if (errors.length > 0) {
+    alert("Please fix the following errors before submitting:\n\n" + errors.join('\n'));
+    return;
+  }
+
+  const formData = new FormData();
   make_globalMedia_consistent();
 
   Object.entries(globalMedia).forEach(([_, media]) => {
-      console.log(`Adding media: ${media.filename}`);
-      formData.append('files', dataURLToBlob(media.dataUrl), media.filename);
+    formData.append('files', dataURLToBlob(media.dataUrl), media.filename);
   });
 
   formData.append('metadata', JSON.stringify(metadata));
-
-    // debugging
-//   console.log(JSON.stringify(metadata, null, 2));
-//     for (let pair of formData.getAll('files')) {
-//         console.log(pair instanceof File ? pair.name : pair);
-//     }
-//     return;
 
   await fetch(`/${sessionId}/complete`, {
     method: 'POST',
@@ -573,3 +572,94 @@ function renderMediaGrid(containerId, arr, label) {
     container.appendChild(wrap);
   });
 }
+
+function validateMetadata(metadata) {
+  const errors = [];
+
+  // Application Category (required)
+  if (!metadata.applicationCategory || metadata.applicationCategory.trim() === "") {
+    errors.push("Application Category is required.");
+  }
+
+  // Visibility (required)
+  if (!metadata.visibility || metadata.visibility.trim() === "") {
+    errors.push("Visibility is required.");
+  }
+
+  // Target Publish Mode (required)
+  if (!metadata.targetPublishMode || metadata.targetPublishMode.trim() === "") {
+    errors.push("Target Publish Mode is required.");
+  }
+
+  // Target Publish Date (required)
+  if (!metadata.targetPublishDate || metadata.targetPublishDate.trim() === "") {
+    errors.push("Target Publish Date is required.");
+  }
+
+  // Pricing (required)
+  if (!metadata.pricing || !metadata.pricing.priceId || metadata.pricing.priceId.trim() === "") {
+    errors.push("Pricing (Price ID) is required.");
+  }
+
+  // Listings (at least one required)
+  if (!metadata.listings || Object.keys(metadata.listings).length === 0) {
+    errors.push("At least one listing (language) is required.");
+  } else {
+    // Validate each listing
+    Object.entries(metadata.listings).forEach(([lang, listing]) => {
+      if (!listing.baseListing) {
+        errors.push(`Base listing is missing for language: ${lang}`);
+        return;
+      }
+      if (!listing.baseListing.title || listing.baseListing.title.trim() === "") {
+        errors.push(`Title is required for listing: ${lang}`);
+      }
+      if (!listing.baseListing.description || listing.baseListing.description.trim() === "") {
+        errors.push(`Description is required for listing: ${lang}`);
+      }
+      // Features, releaseNotes, minimumHardware, images are optional
+    });
+  }
+
+  // Icon (required for at least one locale)
+  const hasIcon = Object.values(globalMedia).some(
+    m => m.type === MediaType.ICON && m.locales && m.locales.length > 0
+  );
+  if (!hasIcon) {
+    errors.push("At least one App Icon is required.");
+  }
+
+  // Screenshots (at least one required for at least one locale)
+  const hasScreenshot = Object.values(globalMedia).some(
+    m => m.type === MediaType.SCREENSHOT && m.locales && m.locales.length > 0
+  );
+  if (!hasScreenshot) {
+    errors.push("At least one Screenshot is required.");
+  }
+
+  // Trailer and Trailer Image are optional
+  // Accessibility, backup, in-app, etc. are optional (can add more checks if needed)
+
+  return errors;
+}
+
+function populateAddListingDropdown() {
+  const select = document.getElementById('addListingSelect');
+  select.innerHTML = '';
+  ALL_LOCALES.forEach(listing => {
+    const option = document.createElement('option');
+    option.value = listing;
+    option.textContent = listing;
+    select.appendChild(option);
+  });
+}
+
+function addListingFromDropdown() {
+  const select = document.getElementById('addListingSelect');
+  if (select.value) {
+    addListing(select.value);
+  }
+}
+
+// Call on page load
+document.addEventListener('DOMContentLoaded', populateAddListingDropdown);

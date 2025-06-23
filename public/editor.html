@@ -214,7 +214,8 @@
       <div style="margin-bottom: 16px;">
         <label for="listingSelect" style="font-weight:600;">Language Listing:</label>
         <select id="listingSelect" onchange="switchListing(this.value)"></select>
-        <button class="add-btn" onclick="addListing()">+ Add Listing</button>
+        <select id="addListingSelect" style="margin-left:8px;"></select>
+        <button class="add-btn" onclick="addListingFromDropdown()">+ Add Listing</button>
         <button class="remove-btn" onclick="removeListing()" style="margin-left:8px;">Remove Listing</button>
       </div>
       <input id="title" class="app-title-input" placeholder="App title" />
