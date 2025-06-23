@@ -161,14 +161,13 @@ function dataURLToBlob(dataUrl) {
   return new Blob([u8arr], { type: mime });
 }
 
-function addListing() {
-  const lang = prompt("Enter new language code (e.g. 'en', 'fr', 'de'):");
+function addListing(lang) {
   if (!lang) return;
-  if (!metadata.listings) metadata.listings = {};
   if (metadata.listings[lang]) {
     alert("Listing already exists for this language.");
     return;
   }
+  if (!metadata.listings) metadata.listings = {};
   metadata.listings[lang] = {
     baseListing: {
       title: '',
