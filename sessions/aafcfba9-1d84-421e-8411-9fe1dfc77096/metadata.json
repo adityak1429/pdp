@@ -1,0 +1,125 @@
+{
+  "applicationCategory": "HealthAndFitness",
+  "pricing": {
+    "trialPeriod": "TrialNeverExpires",
+    "marketSpecificPricings": {
+      "lB": "NotAvailable",
+      "eH": "NotAvailable"
+    },
+    "sales": [],
+    "priceId": "Free",
+    "isAdvancedPricingModel": true
+  },
+  "visibility": "Public",
+  "targetPublishMode": "Immediate",
+  "targetPublishDate": "1601-01-01T00:00:00.0000000Z",
+  "listings": {
+    "en-us": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "",
+        "keywords": [],
+        "licenseTerms": "",
+        "privacyPolicy": "pp1",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "desc 123 hgfuvvgubl",
+        "features": [],
+        "releaseNotes": "",
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "FitnessFuel"
+      },
+      "platformOverrides": {}
+    },
+    "fr": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "",
+        "keywords": [],
+        "licenseTerms": "",
+        "privacyPolicy": "pp2",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "fr?",
+        "features": [],
+        "releaseNotes": "",
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "FitnessFuel"
+      },
+      "platformOverrides": {}
+    },
+    "es": {
+      "baseListing": {
+        "copyrightAndTrademarkInfo": "",
+        "keywords": [],
+        "licenseTerms": "",
+        "privacyPolicy": "",
+        "supportContact": "",
+        "websiteUrl": "",
+        "description": "look es",
+        "features": [],
+        "releaseNotes": "",
+        "recommendedHardware": [],
+        "minimumHardware": [],
+        "title": "FitnessFuel"
+      },
+      "platformOverrides": {}
+    }
+  },
+  "hardwarePreferences": [],
+  "automaticBackupEnabled": false,
+  "canInstallOnRemovableMedia": false,
+  "isGameDvrEnabled": false,
+  "gamingOptions": [
+    {
+      "genres": [],
+      "isLocalMultiplayer": false,
+      "isLocalCooperative": false,
+      "isOnlineMultiplayer": false,
+      "isOnlineCooperative": false,
+      "isBroadcastingPrivilegeGranted": true,
+      "isCrossPlayEnabled": false,
+      "kinectDataForExternal": "Disabled"
+    }
+  ],
+  "hasExternalInAppProducts": false,
+  "meetAccessibilityGuidelines": false,
+  "notesForCertification": "",
+  "packageDeliveryOptions": {
+    "packageRollout": {
+      "isPackageRollout": false,
+      "packageRolloutPercentage": 0,
+      "packageRolloutStatus": "PackageRolloutNotStarted",
+      "fallbackSubmissionId": "0"
+    },
+    "isMandatoryUpdate": false,
+    "mandatoryUpdateEffectiveDate": "1601-01-01T00:00:00.0000000Z"
+  },
+  "enterpriseLicensing": "None",
+  "allowMicrosoftDecideAppAvailabilityToFutureDeviceFamilies": false,
+  "allowTargetFutureDeviceFamilies": {
+    "desktop": true,
+    "mobile": false,
+    "xbox": false,
+    "team": false,
+    "holographic": true
+  },
+  "trailers": [
+    {
+      "id": "400001080",
+      "videoFileName": "Trailer_es_es-asset.mp4",
+      "videoFileId": "3052572937853077504",
+      "trailerAssets": {
+        "es": {
+          "title": "Trailer_es_es-asset.mp4",
+          "imageList": [
+            {
+              "fileName": "TrailerImage_es_es-asset.png",
+              "id": "3022149909781248648"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

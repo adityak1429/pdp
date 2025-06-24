@@ -202,13 +202,18 @@
   </style>
 </head>
 <body>
+  <div class="container">
+
 
 <div class="container">
   <div class="hero">
     <div class="hero-media" id="icon">
       <!-- Icon image will be rendered here by JS -->
     </div>
-    <input type="file" id="iconUpload" accept="image/*" style="margin-top:8px;display: none;" onchange="changeIcon(this)">
+    <!-- Add this at the top of your <body> in editor.html -->
+
+
+    <input type="file" id="iconUpload" accept="image/*" style="margin-top:8px; display:none;" onchange="changeIcon(this)">
     <button class="add-btn" type="button" onclick="document.getElementById('iconUpload').click()">Change Icon</button>
     <div class="hero-details">
       <div style="margin-bottom: 16px;">
