@@ -51,6 +51,7 @@ function getMediaType(originalname) {
   for (const type of Object.values(MediaType)) {
     if (originalname.split('_')[0]===(type)) return type;
   }
+  alert(`Unknown media type for file: ${originalname}`);
   throw new Error(`Unknown media type for file: ${originalname}`);
 }
 

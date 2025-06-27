@@ -35,6 +35,7 @@
     const product_id = new URLSearchParams(window.location.search).get('product_id');
     if (!submission_id || !product_id) {
       document.body.innerHTML = '<h2>Error: Missing submission_id or product_id in URL.</h2>';
+      alert('Error: Missing submission_id or product_id in URL.');
       throw new Error('Missing submission_id or product_id in URL');
     }
 

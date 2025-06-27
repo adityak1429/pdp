@@ -40,6 +40,7 @@ const saveFiles = (req, sessionId) => {
       metadata = JSON.parse(metadataField);
       console.log(`Metadata received: ${JSON.stringify(metadata,null,2)}`);
     } catch (e) {
+      console.error("Invalid metadata JSON.");
       throw new Error("Invalid metadata JSON.");
     }
   }
