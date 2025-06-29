@@ -351,10 +351,10 @@ async function initialLoad() {
     addListing(); // If no listings, create one
     currentListingKey = Object.keys(metadata.listings || {})[0] ;
   }
+  await fetchMedia(sessionId);
   populateListingDropdown();
   loadListing();
   document.getElementById('pricing').value = (metadata.pricing && metadata.pricing.priceId) || 'Free';
-  await fetchMedia(sessionId);
   document.getElementById('category').value = metadata.applicationCategory || '';
   document.getElementById('visibility').value = metadata.visibility || '';
   document.getElementById('publishMode').value = metadata.targetPublishMode || '';
@@ -363,6 +363,7 @@ async function initialLoad() {
   document.getElementById('backup').value = metadata.automaticBackupEnabled ? 'true' : 'false';
   document.getElementById('inapp').value = metadata.hasExternalInAppProducts ? 'true' : 'false';
   document.getElementById('accessibility').value = metadata.meetAccessibilityGuidelines ? 'true' : 'false';
+  console.log("Initial load complete. Current listing key:", currentListingKey);
 }
 
 
