@@ -1,3 +1,4 @@
+const ALL_LOCALES = window.ALL_LOCALES;
 const sessionId = window.location.pathname.split('/')[2]; // e.g., /preview/SESSION_ID or /preview/SESSION_ID/submission_id
 console.log("Session ID from URL:", sessionId);
 if (!sessionId) {
@@ -70,22 +71,12 @@ async function addMediaFile(file, type, locale, filename = `${type}_${locale}_${
     reader.readAsDataURL(file);
   });
 }
-// list of all locales in ms store
-const ALL_LOCALES = [
-  "en", "en-us", "en-gb", "fr", "fr-fr", "fr-ca", "de", "de-de", "de-at", "de-ch",
-  "es", "es-es", "es-mx", "es-ar", "it", "it-it", "pt", "pt-br", "pt-pt", "zh",
-  "zh-cn", "zh-tw", "zh-hk", "ja", "ja-jp", "ko", "ko-kr", "ru", "ru-ru", "ar",
-  "ar-sa", "ar-eg", "hi", "hi-in", "nl", "nl-nl", "nl-be", "tr", "tr-tr", "sv",
-  "sv-se", "no", "no-no", "da", "da-dk", "fi", "fi-fi", "pl", "pl-pl", "cs",
-  "cs-cz", "el", "el-gr", "he", "he-il", "th", "th-th", "vi", "vi-vn", "id",
-  "id-id", "ms", "ms-my", "ro", "ro-ro", "hu", "hu-hu", "uk", "uk-ua"
-];
 
 function addToGlobalMedia(filename, dataUrl, locale) {
     if(locale.startsWith("all")){
         const exclude_list = locale.slice(4).split(',');
         // Remove excluded locales from ALL_LOCALES
-        const filteredLocales = ALL_LOCALES.filter(loc => !exclude_list.includes(loc));
+        const filteredLocales = ALL_LOCALES.filter(loc => !exclude_list.includes(loc.toLowerCase().trim()));
         globalMedia[filename] = {
             filename,
             dataUrl,
@@ -371,21 +362,34 @@ async function initialLoad() {
 async function changeIcon(input) {
   if (!input.files || !input.files[0]) return;
   const file = input.files[0];
-  if (!file.type.startsWith('image/')) {
-    alert("Please upload a valid image file for the icon.");
+  if (file.type !== 'image/png') {
+    alert("Please upload a PNG file for the icon.");
     return;
   }
-  // Remove existing icon if any
-  const existingIcon = Object.values(globalMedia).find(
-    m => m.type === MediaType.ICON && m.locales.includes(currentListingKey)
-  );
-  if (existingIcon) {
-    deleteImage(existingIcon.filename);
-    console.log("Removed existing icon:", existingIcon.filename);
-  }
-  await addMediaFile(file, MediaType.ICON, currentListingKey);
-  renderMedia();
-  input.value = ""; // Clear the input after use
+
+  // Check if the image is 1:1 (square)
+  const img = new Image();
+  img.onload = async function() {
+    if (img.width !== img.height) {
+      alert("Icon image must be square (1:1 aspect ratio).");
+      return;
+    }
+    // Remove existing icon if any
+    const existingIcon = Object.values(globalMedia).find(
+      m => m.type === MediaType.ICON && m.locales.includes(currentListingKey)
+    );
+    if (existingIcon) {
+      deleteImage(existingIcon.filename);
+      console.log("Removed existing icon:", existingIcon.filename);
+    }
+    await addMediaFile(file, MediaType.ICON, currentListingKey);
+    renderMedia();
+    input.value = ""; // Clear the input after use
+  };
+  img.onerror = function() {
+    alert("Failed to load image. Please upload a valid PNG file.");
+  };
+  img.src = URL.createObjectURL(file);
 }
 
 // make file names consistent across locales
@@ -592,8 +596,9 @@ function validateMetadata(metadata) {
 
   // Target Publish Date (required)
   if (!metadata.targetPublishDate || metadata.targetPublishDate.trim() === "") {
+    if(metadata.targetPublishMode.lower()==="manual"){
     errors.push("Target Publish Date is required.");
-  }
+  }}
 
   // Pricing (required)
   if (!metadata.pricing || !metadata.pricing.priceId || metadata.pricing.priceId.trim() === "") {

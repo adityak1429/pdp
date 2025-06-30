@@ -53,10 +53,6 @@ const saveFiles = (req, sessionId) => {
   for (const file of req.files) {
     const filePath = path.join(sessionDir, file.originalname);
     fs.writeFileSync(filePath, file.buffer);
-    if (file.originalname !== 'metadata.json') {
-      console.log(`File saved: ${filePath}`);
-      mediaFiles.push(file.originalname);
-    }
   }
 };
 
