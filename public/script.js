@@ -444,7 +444,7 @@ async function initialLoad() {
   document.getElementById('visibility').value = metadata.visibility || '';
   document.getElementById('publishMode').value = metadata.targetPublishMode || '';
   document.getElementById('publishDate').value = metadata.targetPublishDate ? metadata.targetPublishDate.split('T')[0] : '';
-  document.getElementById('trial').value = (metadata.pricing && metadata.pricing.trialPeriod) || '';
+  document.getElementById('trial').value = (metadata.pricing && metadata.pricing.trialPeriod) || 'NoFreeTrial';
   document.getElementById('backup').value = metadata.automaticBackupEnabled ? 'true' : 'false';
   document.getElementById('inapp').value = metadata.hasExternalInAppProducts ? 'true' : 'false';
   document.getElementById('accessibility').value = metadata.meetAccessibilityGuidelines ? 'true' : 'false';
@@ -732,6 +732,10 @@ function validateMetadata(metadata) {
   // Pricing (required)
   if (!metadata.pricing || !metadata.pricing.priceId || metadata.pricing.priceId.trim() === "") {
     errors.push("Pricing (Price ID) is required.");
+  }
+
+  if(metadata.pricing && !metadata.pricing.trialPeriod.trim() === "") {
+    metadata.pricing.trialPeriod = "NoFreeTrial"; // Default value if not set
   }
 
   // Listings (at least one required)
