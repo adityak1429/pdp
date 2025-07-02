@@ -32,19 +32,24 @@ const MediaType = {
 };
 
 function saveNonListingMetadata() {
-  metadata.applicationCategory = document.getElementById('category').value;
-  metadata.visibility = document.getElementById('visibility').value;
-  metadata.targetPublishMode = document.getElementById('publishMode').value;
-  metadata.targetPublishDate = document.getElementById('publishDate').value;
-  if (!metadata.pricing) metadata.pricing = {};
-  metadata.pricing.priceId = document.getElementById('pricing').value;
-  metadata.pricing.trialPeriod = document.getElementById('trial').value;
-  metadata.automaticBackupEnabled = document.getElementById('backup').value === 'true';
-  metadata.hasExternalInAppProducts = document.getElementById('inapp').value === 'true';
-  metadata.meetAccessibilityGuidelines = document.getElementById('accessibility').value === 'true';
-  if (!metadata.gamingOptions || !Array.isArray(metadata.gamingOptions)) metadata.gamingOptions = [{}];
-  if (!metadata.gamingOptions[0]) metadata.gamingOptions[0] = {};
-  metadata.gamingOptions[0].genres = [];
+  try {
+    metadata.applicationCategory = document.getElementById('category').value;
+    metadata.visibility = document.getElementById('visibility').value;
+    metadata.targetPublishMode = document.getElementById('publishMode').value;
+    metadata.targetPublishDate = document.getElementById('publishDate').value;
+    if (!metadata.pricing) metadata.pricing = {};
+    metadata.pricing.priceId = document.getElementById('pricing').value;
+    metadata.pricing.trialPeriod = document.getElementById('trial').value;
+    metadata.automaticBackupEnabled = document.getElementById('backup').value === 'true';
+    metadata.hasExternalInAppProducts = document.getElementById('inapp').value === 'true';
+    metadata.meetAccessibilityGuidelines = document.getElementById('accessibility').value === 'true';
+    if (!metadata.gamingOptions || !Array.isArray(metadata.gamingOptions)) metadata.gamingOptions = [{}];
+    if (!metadata.gamingOptions[0]) metadata.gamingOptions[0] = {};
+    metadata.gamingOptions[0].genres = [];
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 // --- Use enum for getMediaType ---
@@ -61,37 +66,45 @@ const globalMedia = {}; // { filename: { file, dataUrl, type, locale } }
 
 // --- Helper: Add file to globalMedia with prefix ---
 async function addMediaFile(file, type, locale, filename = `${type}_${locale}_${Date.now()}.${file.name.split('.').pop()}`) {
-  await new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      addToGlobalMedia(filename, e.target.result, locale);
-      resolve();
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
+  try {
+    await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        addToGlobalMedia(filename, e.target.result, locale);
+        resolve();
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 function addToGlobalMedia(filename, dataUrl, locale) {
+  try {
     if(locale.startsWith("all")){
-        const exclude_list = locale.slice(4).split(',');
-        // Remove excluded locales from ALL_LOCALES
-        const filteredLocales = ALL_LOCALES.filter(loc => !exclude_list.includes(loc.toLowerCase().trim()));
-        globalMedia[filename] = {
-            filename,
-            dataUrl,
-            type:getMediaType(filename),
-            locales : [...filteredLocales],
-            };
-        }
-    else{
-        globalMedia[filename] = {
-            filename,
-            dataUrl,
-            type:getMediaType(filename),
-            locales : [...locale.split(',').map(loc => loc.trim())],
-            };
+      const exclude_list = locale.slice(4).split(',');
+      const filteredLocales = ALL_LOCALES.filter(loc => !exclude_list.includes(loc.toLowerCase().trim()));
+      globalMedia[filename] = {
+        filename,
+        dataUrl,
+        type:getMediaType(filename),
+        locales : [...filteredLocales],
+      };
+    } else {
+      globalMedia[filename] = {
+        filename,
+        dataUrl,
+        type:getMediaType(filename),
+        locales : [...locale.split(',').map(loc => loc.trim())],
+      };
     }
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 function removeFromGlobalMedia(filename) {
