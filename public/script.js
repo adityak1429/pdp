@@ -725,7 +725,7 @@ function validateMetadata(metadata) {
 
   // Target Publish Date (required)
   if (!metadata.targetPublishDate || metadata.targetPublishDate.trim() === "") {
-    if(metadata.targetPublishMode.lower()==="manual"){
+    if(metadata.targetPublishMode.toLowerCase()==="manual"){
     errors.push("Target Publish Date is required.");
   }}
 
