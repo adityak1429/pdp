@@ -54,11 +54,16 @@ function saveNonListingMetadata() {
 
 // --- Use enum for getMediaType ---
 function getMediaType(originalname) {
+  try{
   for (const type of Object.values(MediaType)) {
     if (originalname.split('_')[0]===(type)) return type;
   }
   alert(`Unknown media type for file: ${originalname}`);
   throw new Error(`Unknown media type for file: ${originalname}`);
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 // --- Global media object ---
@@ -108,6 +113,7 @@ function addToGlobalMedia(filename, dataUrl, locale) {
 }
 
 function removeFromGlobalMedia(filename) {
+  try {
     if (globalMedia[filename]) {
         // Remove currentListingKey from the locales array
         const idx = globalMedia[filename].locales.indexOf(currentListingKey);
@@ -125,10 +131,15 @@ function removeFromGlobalMedia(filename) {
     } else {
         console.warn(`Media file not found: ${filename}`);
     }
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 // --- Helper: fetch media file as data URL from backend ---
 async function fetchMedia(sessionId) {
+  try{
   // Fetch media files from backend and populate globalMedia
   const res = await fetch(`/${sessionId}/media/`);
   if (!res.ok) return;
@@ -150,9 +161,14 @@ async function fetchMedia(sessionId) {
     addToGlobalMedia(name, dataUrl, locale);
   });
   renderMedia();
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 function dataURLToBlob(dataUrl) {
+  try{
   // Split the data URL into [header, data]
   const arr = dataUrl.split(',');
   const mimeMatch = arr[0].match(/:(.*?);/);
@@ -164,9 +180,14 @@ function dataURLToBlob(dataUrl) {
     u8arr[n] = bstr.charCodeAt(n);
   }
   return new Blob([u8arr], { type: mime });
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 function addListing(lang) {
+  try{
   if (!lang) return;
   if (metadata.listings[lang]) {
     alert("Listing already exists for this language.");
@@ -188,9 +209,14 @@ function addListing(lang) {
   currentListingKey = lang;
   populateListingDropdown();
   loadListing();
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 function populateListingDropdown() {
+  try{
   const select = document.getElementById('listingSelect');
   if (!select) return;
   select.innerHTML = '';
@@ -205,9 +231,14 @@ function populateListingDropdown() {
     currentListingKey = keys[0];
   }
   select.value = currentListingKey;
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 function removeListing() {
+  try{
   if (!currentListingKey || !metadata.listings || !metadata.listings[currentListingKey]) return;
   if (Object.keys(metadata.listings).length === 1) {
     alert("At least one listing is required.");
@@ -219,25 +250,40 @@ function removeListing() {
   currentListingKey = keys[0];
   populateListingDropdown();
   loadListing();
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 
 // --- Switch listing: save current, switch, load new ---
 function switchListing(lang) {
+  try{
   saveCurrentListing();
   currentListingKey = lang;
   loadListing();
   console.log(`Switched to listing: ${currentListingKey}`);
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 function deleteImage(filename) {
+  try{
   removeFromGlobalMedia(filename);
   // console.log(`Deleted: ${filename}`);
   renderMedia();
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 
 async function uploadScreenshots(input) {
+  try{
   if (!input.files.length) return;
     for (const file of input.files) {
       await addMediaFile(file, MediaType.SCREENSHOT, currentListingKey);
@@ -245,23 +291,38 @@ async function uploadScreenshots(input) {
     input.value = ""; // Clear the input after use
     console.log("Screenshots uploaded:", input.files);
   renderMedia();      
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 async function uploadTrailerImage(input) {
+  try{
   if (!input.files.length) return;
   await addMediaFile(input.files[0], MediaType.TRAILER_IMAGE, currentListingKey,filename = `TrailerImage_${currentListingKey}_${currentListingKey}-asset.${input.files[0].name.split('.').pop()}`);
     input.value = ""; // Clear the input after use
   renderMedia();      
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 async function uploadTrailer(input) {
+  try{
   if (!input.files.length) return;
   await addMediaFile(input.files[0], MediaType.TRAILER, currentListingKey, filename = `Trailer_${currentListingKey}_${currentListingKey}-asset.${input.files[0].name.split('.').pop()}`);
   input.value = ""; // Clear the input after use
   renderMedia();      
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 function addListItem(listId) {
+  try{
   let arr;
   if (listId === 'features') {
     arr = featuresArr;
@@ -272,10 +333,15 @@ function addListItem(listId) {
   }
   arr.push('');
   renderList(listId, arr);
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 // --- Render all media for current locale ---
 function renderMedia() {
+  try{
   // Screenshots
   const localMedia = Object.values(globalMedia).filter(
     m => m.locales && m.locales.includes(currentListingKey)
@@ -302,10 +368,15 @@ function renderMedia() {
   );
   renderIcon(icons[0]);
   console.log("Rendering media:", currentListingKey);
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 // --- Call renderMedia in loadListing and after uploads ---
 function loadListing() {
+  try{
   if (!currentListingKey || !metadata.listings || !metadata.listings[currentListingKey]) {
     baseListing = {};
     document.getElementById('title').value = '';
@@ -328,9 +399,14 @@ function loadListing() {
   hardwareArr = baseListing.minimumHardware ? [...baseListing.minimumHardware] : [];
   renderList('hardware', hardwareArr);
   renderMedia();
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 function saveCurrentListing() {
+  try{
   if (!currentListingKey || !metadata.listings || !metadata.listings[currentListingKey]) return;
   const baseListing = metadata.listings[currentListingKey].baseListing;
   baseListing.title = document.getElementById('title').value;
@@ -338,10 +414,15 @@ function saveCurrentListing() {
   baseListing.features = [...featuresArr];
   baseListing.releaseNotes = document.getElementById('releaseNotes').value;
   baseListing.minimumHardware = [...hardwareArr];
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 // --- When loading, set per-listing media arrays and call loadListing  ---
 async function initialLoad() {
+  try{
   const res = await fetch(`/${sessionId}`);
   if (res.status === 404) {
     alert("Session not found. Please check the session ID in the URL.");
@@ -368,11 +449,16 @@ async function initialLoad() {
   document.getElementById('inapp').value = metadata.hasExternalInAppProducts ? 'true' : 'false';
   document.getElementById('accessibility').value = metadata.meetAccessibilityGuidelines ? 'true' : 'false';
   console.log("Initial load complete. Current listing key:", currentListingKey);
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 
 //143 write generic media file deleter
 async function changeIcon(input) {
+  try{
   if (!input.files || !input.files[0]) return;
   const file = input.files[0];
   if (file.type !== 'image/png') {
@@ -403,10 +489,15 @@ async function changeIcon(input) {
     alert("Failed to load image. Please upload a valid PNG file.");
   };
   img.src = URL.createObjectURL(file);
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 // make file names consistent across locales
 function make_globalMedia_consistent() {
+  try{
   for (const [filename, media] of Object.entries(globalMedia)) {
     const parts = filename.split('_');
     // filename format: type_locale_timestamp.ext
@@ -443,10 +534,15 @@ function make_globalMedia_consistent() {
       globalMedia[filename].filename = `${parts[0]}_${media.locales.join(',')}_${parts.slice(2).join('_')}`;
     }
   }
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 // --- Approve: upload only current listing's media ---
 async function approve() {
+  try{
   saveCurrentListing();
   saveNonListingMetadata();
 
@@ -472,6 +568,10 @@ async function approve() {
   }).then(res => res.json());
 
   alert("Saved and Approved!");
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
   initialLoad();
@@ -482,6 +582,7 @@ async function approve() {
 // Render screenshots (no type check needed)
 
 function renderIcon(file) {
+  try{
   const iconDiv = document.getElementById('icon');
   // Remove any previous icon image and delete button
   while (iconDiv.firstChild) {
@@ -519,9 +620,14 @@ function renderIcon(file) {
     iconDiv.appendChild(delBtn);
     iconDiv.insertBefore(img, iconDiv.firstChild);
   }
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 function renderList(containerId, arr) {
+  try{
   const ul = document.getElementById(containerId);
   ul.innerHTML = '';
   arr.forEach((item, idx) => {
@@ -544,10 +650,15 @@ function renderList(containerId, arr) {
 
     ul.appendChild(li);
   });
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 
 function renderMediaGrid(containerId, arr, label) {
+  try{
   const container = document.getElementById(containerId);
   container.innerHTML = '';
   arr.forEach((item, idx) => {
@@ -587,9 +698,14 @@ function renderMediaGrid(containerId, arr, label) {
     // }
     container.appendChild(wrap);
   });
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 function validateMetadata(metadata) {
+  try{
   const errors = [];
 
   // Application Category (required)
@@ -658,9 +774,14 @@ function validateMetadata(metadata) {
   // Accessibility, backup, in-app, etc. are optional (can add more checks if needed)
 
   return errors;
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 function populateAddListingDropdown() {
+  try{
   const select = document.getElementById('addListingSelect');
   select.innerHTML = '';
   ALL_LOCALES.forEach(listing => {
@@ -669,12 +790,21 @@ function populateAddListingDropdown() {
     option.textContent = listing;
     select.appendChild(option);
   });
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
+  }
 }
 
 function addListingFromDropdown() {
+  try{
   const select = document.getElementById('addListingSelect');
   if (select.value) {
     addListing(select.value);
+  }
+  } catch (err) {
+    alert("Error: " + (err && err.message ? err.message : err));
+    throw err;
   }
 }
 
